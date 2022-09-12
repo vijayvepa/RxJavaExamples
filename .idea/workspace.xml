@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ac1ea580-bb76-4b73-b2d9-af6a67a68e19" name="Changes" comment="initial setup">
-      <change afterPath="$PROJECT_DIR$/lib/src/main/java/rxjava/examples/Person.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/src/main/java/rxjava/examples/PersonDao.java" afterDir="false" />
-    </list>
-    <list id="d3ed61ba-104d-4d85-821b-4cdc0143ac53" name="Exclude" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RxJavaRefactoringExample.iml" afterDir="false" />
+    <list default="true" id="ac1ea580-bb76-4b73-b2d9-af6a67a68e19" name="Changes" comment="legacy code">
+      <change afterPath="$PROJECT_DIR$/lib/src/main/java/rxjava/examples/PersonBL.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/main/java/rxjava/examples/PersonDetails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/test/java/rxjava/examples/PersonBLTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +70,30 @@
       <recent name="rxjava.examples" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.PersonBLTest.listPeopleTest">
+    <configuration name="PersonBLTest.listPeopleTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":lib:test" />
+            <option value="--tests" />
+            <option value="&quot;rxjava.examples.PersonBLTest.listPeopleTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="PersonDaoTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -102,6 +119,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.PersonBLTest.listPeopleTest" />
         <item itemvalue="Gradle.PersonDaoTest" />
       </list>
     </recent_temporary>
@@ -110,7 +128,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="ac1ea580-bb76-4b73-b2d9-af6a67a68e19" name="Changes" comment="" />
-      <changelist id="d3ed61ba-104d-4d85-821b-4cdc0143ac53" name="Exclude" comment="" />
+      <changelist id="" name="Exclude" comment="" />
       <created>1662984060883</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -123,7 +141,21 @@
       <option name="project" value="LOCAL" />
       <updated>1663015262395</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="legacy code">
+      <created>1663023998786</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1663023998786</updated>
+    </task>
+    <task id="LOCAL-00003" summary="legacy code">
+      <created>1663024140263</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1663024140263</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -139,6 +171,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial setup" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial setup" />
+    <MESSAGE value="legacy code" />
+    <option name="LAST_COMMIT_MESSAGE" value="legacy code" />
   </component>
 </project>
