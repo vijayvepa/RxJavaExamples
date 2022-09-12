@@ -4,14 +4,14 @@ package rxjava.examples;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PersonDaoTest {
+    private final PersonDao personDao = new PersonDao();
     @Test
-    void listPeopleTest() throws ExecutionException, InterruptedException {
-        List<Person> people = new PersonDao().listPeople().toList().blockingGet();
+    void listPeopleTest() {
+        List<Person> people = ObservableUtils.toList(personDao.listPeople());
         assertEquals(1000, people.size());
     }
 }

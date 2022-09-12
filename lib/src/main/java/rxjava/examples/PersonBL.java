@@ -1,7 +1,6 @@
 package rxjava.examples;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class PersonBL {
@@ -11,9 +10,9 @@ public class PersonBL {
         this.personDao = personDao;
     }
 
-    public List<PersonDetails> listPeople() throws ExecutionException, InterruptedException {
+    public List<PersonDetails> listPeople() {
 
-        List<Person> people = personDao.listPeople().toList().blockingGet();
+        List<Person> people = ObservableUtils.toList(personDao.listPeople());
 
         return people.stream().map(x->new PersonDetails()).collect(Collectors.toList());
     }
