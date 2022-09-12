@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 public class PersonDao {
 
     Observable<Person> listPeople(){
-        return Observable.from( query("SELECT * FROM PEOPLE"));
+        return Observable.defer(()->Observable.from( query("SELECT * FROM PEOPLE")));
     }
 
     @SuppressWarnings({"unused", "SameParameterValue"})
