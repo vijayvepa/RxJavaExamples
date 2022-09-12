@@ -1,13 +1,16 @@
 package rxjava.examples;
 
+
+import io.reactivex.Observable;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class PersonDao {
 
-    List<Person> listPeople(){
-        return query("SELECT * FROM PEOPLE");
+    Observable<Person> listPeople(){
+        return Observable.fromIterable( query("SELECT * FROM PEOPLE"));
     }
 
     private List<Person> query(String s) {
