@@ -1,5 +1,7 @@
 package rxjava.examples;
 
+import rx.Observable;
+
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -18,23 +20,24 @@ public class PersonBL {
 
         List<Person> people = ObservableUtils.toList(personDao.listPeople());
 
-        return people.stream().map(x->new PersonDetails()).collect(Collectors.toList());
+        return people.stream().map(x -> new PersonDetails()).collect(Collectors.toList());
     }
 
-    Book bestBookFor(Person person){
-        try{
-            return recommendBook(person);
-        }catch (Exception e){
-            return bestSeller();
-        }
+    Observable<Book> bestBookFor(Person person) {
+        return tryRecommendBook(person).onErrorResumeNext(bestSeller());
     }
 
-    private Book bestSeller() {
-        return new Book().title("best-seller");
+    private Observable<Book> bestSeller() {
+        return ObservableUtils.fromObject(new Book().title("best-seller"));
+    }
+
+
+    private Observable<Book> tryRecommendBook(Person person) {
+        return Observable.defer(() -> ObservableUtils.fromObject(recommendBook(person)));
     }
 
     private Book recommendBook(Person person) {
-        if(!hasEnoughData(person)){
+        if (!hasEnoughData(person)) {
             throw new CannotRecommendBookException();
         }
 
@@ -42,7 +45,7 @@ public class PersonBL {
     }
 
     private boolean hasEnoughData(Person person) {
-       return person.hasActivity();
+        return person.hasActivity();
     }
 
 

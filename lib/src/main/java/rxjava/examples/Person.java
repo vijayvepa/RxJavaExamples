@@ -7,4 +7,5 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 public class Person {
     boolean hasActivity;
+    int id;
 }
