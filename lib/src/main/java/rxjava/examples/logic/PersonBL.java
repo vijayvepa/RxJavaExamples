@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class PersonBL {
     final PersonDao personDao;
     final PersonRxBL personRxBL;
-
     final Random random;
 
     public PersonBL(PersonDao personDao) {
@@ -22,9 +21,7 @@ public class PersonBL {
     }
 
     public List<PersonDetails> listPeople() {
-
         List<Person> people = ObservableUtils.toList(personDao.listPeople());
-
         return people.stream().map(x -> new PersonDetails()).collect(Collectors.toList());
     }
 
