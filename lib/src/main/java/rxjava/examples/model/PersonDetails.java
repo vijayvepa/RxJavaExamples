@@ -1,4 +1,4 @@
-package rxjava.examples;
+package rxjava.examples.model;
 
 public class PersonDetails {
 }

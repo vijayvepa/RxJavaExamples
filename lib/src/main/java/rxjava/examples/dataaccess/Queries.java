@@ -1,4 +1,4 @@
-package rxjava.examples;
+package rxjava.examples.dataaccess;
 
 public final class Queries {
     public static final String SELECT_ALL = "SELECT * FROM PEOPLE";

@@ -1,8 +1,9 @@
-package rxjava.examples;
+package rxjava.examples.dataaccess;
 
 
 
 import rx.Observable;
+import rxjava.examples.model.Person;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +14,7 @@ public class PersonDao {
 
     private static final int PAGE_SIZE = 10;
 
-    Observable<Person> listPeople(){
+    public Observable<Person> listPeople(){
         return Observable.defer(()->Observable.from( query(Queries.SELECT_ALL)));
     }
 
@@ -32,7 +33,7 @@ public class PersonDao {
         return Collections.emptyList();
     }
 
-    List<Person> listPeople(int page){
+    public List<Person> listPeople(int page){
         return query(Queries.SELECT_PAGE, PAGE_SIZE, page * PAGE_SIZE);
     }
 }

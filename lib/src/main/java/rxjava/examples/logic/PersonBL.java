@@ -1,6 +1,10 @@
-package rxjava.examples;
+package rxjava.examples.logic;
 
 import rx.Observable;
+import rxjava.examples.ObservableUtils;
+import rxjava.examples.dataaccess.PersonDao;
+import rxjava.examples.model.PersonDetails;
+import rxjava.examples.model.Person;
 
 import java.util.List;
 import java.util.Random;

@@ -2,6 +2,9 @@ package rxjava.examples;
 
 import org.junit.jupiter.api.Test;
 import rx.Observable;
+import rxjava.examples.logic.BookBL;
+import rxjava.examples.model.Book;
+import rxjava.examples.model.Person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

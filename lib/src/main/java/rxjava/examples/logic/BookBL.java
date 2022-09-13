@@ -1,9 +1,13 @@
-package rxjava.examples;
+package rxjava.examples.logic;
 
 import rx.Observable;
+import rxjava.examples.model.CannotRecommendBookException;
+import rxjava.examples.ObservableUtils;
+import rxjava.examples.model.Book;
+import rxjava.examples.model.Person;
 
 public class BookBL {
-    Observable<Book> bestBookFor(Person person) {
+    public Observable<Book> bestBookFor(Person person) {
         return tryRecommendBook(person).onErrorResumeNext(bestSeller());
     }
 
