@@ -2,7 +2,7 @@ package rxjava.examples;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
-import rxjava.examples.logic.EmailBL;
+import rxjava.examples.logic.EmailFutureBL;
 import rxjava.examples.model.Email;
 import rxjava.examples.model.Ticket;
 
@@ -12,14 +12,14 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class EmailBLTest {
+public class EmailFutureBLTest {
 
-    private final EmailBL emailBL = new EmailBL();
+    private final EmailFutureBL emailFutureBL = new EmailFutureBL();
 
     @Test
     public void bulkSendEmail(){
         List<Ticket> tickets = IntStream.range(0, 10).mapToObj(x -> new Ticket()).collect(Collectors.toList());
-        Pair<List<Email>, List<Ticket>> bulkSendEmail = emailBL.bulkSendEmail(tickets);
+        Pair<List<Email>, List<Ticket>> bulkSendEmail = emailFutureBL.bulkSendEmail(tickets);
 
         assertNotEquals(0, bulkSendEmail.getLeft().size());
         assertNotEquals(0, bulkSendEmail.getRight().size());
