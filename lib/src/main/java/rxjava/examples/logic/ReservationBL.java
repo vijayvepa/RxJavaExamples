@@ -13,9 +13,11 @@ import java.time.LocalDateTime;
 public class ReservationBL {
 
     private final EnhancedRandom enhancedRandom;
+    private final EmailBL emailBL;
 
     public ReservationBL() {
         enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandom();
+        emailBL = new EmailBL();
     }
 
     public Email reserveTicket(String flightNumber, String passengerId) {
@@ -23,7 +25,7 @@ public class ReservationBL {
         Flight flight = lookupFlight(flightNumber);
         Passenger passenger = lookupPassenger(passengerId);
         Ticket ticket = bookTicket(flight, passenger);
-        return sendEmail(ticket);
+        return emailBL.sendEmail(ticket);
     }
 
     @SneakyThrows
@@ -49,11 +51,4 @@ public class ReservationBL {
         return new Ticket().flight(flight).passenger(passenger).date(LocalDateTime.now().toString());
     }
 
-    @SneakyThrows
-    Email sendEmail(Ticket ticket) {
-
-        System.out.println("Sending email...");
-        Thread.sleep(500);
-        return new Email().ticket(ticket).emailDate(LocalDateTime.now().toString());
-    }
 }

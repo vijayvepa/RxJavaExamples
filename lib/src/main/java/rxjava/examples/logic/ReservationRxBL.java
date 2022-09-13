@@ -10,9 +10,11 @@ import rxjava.examples.model.Ticket;
 
 public class ReservationRxBL {
     private final ReservationBL reservationBL;
+    private final EmailBL emailBL;
 
     public ReservationRxBL() {
         reservationBL = new ReservationBL();
+        emailBL = new EmailBL();
     }
 
     public Observable<Email> reserveTicketSequential(String flightNumber, String passengerId){
@@ -39,7 +41,7 @@ public class ReservationRxBL {
     }
 
     Observable<Email> sendEmail(Observable<Ticket> ticket){
-        return ticket.map(reservationBL::sendEmail);
+        return ticket.map(emailBL::sendEmail);
     }
 
     Observable<Ticket> bookTicketSquared(Observable<Flight> flight, Observable<Passenger> passenger){
