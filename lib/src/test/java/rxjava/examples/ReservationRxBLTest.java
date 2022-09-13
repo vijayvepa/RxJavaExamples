@@ -13,9 +13,7 @@ public class ReservationRxBLTest {
     @Test
     public void bookTicketSequential() {
 
-        Email email = TimeIt.printTime(() ->
-                ObservableUtils.toObject(
-                        reservationBL.reserveTicketSequential("CK238", "45")));
+        Email email = TimeIt.printTime(() -> ObservableUtils.toObject(reservationBL.reserveTicketSequential("CK238", "45")));
         assertEquals("CK238", email.ticket().flight().flightNumber());
         assertNotNull(email.ticket().date());
 
@@ -25,9 +23,17 @@ public class ReservationRxBLTest {
     @Test
     public void bookTicketParallel() {
 
-        Email email = TimeIt.printTime(() ->
-                ObservableUtils.toObject(
-                        reservationBL.reserveTicketParallel("CK238", "45")));
+        Email email = TimeIt.printTime(() -> ObservableUtils.toObject(reservationBL.reserveTicketParallel("CK238", "45")));
+        assertEquals("CK238", email.ticket().flight().flightNumber());
+        assertNotNull(email.ticket().date());
+
+        assertNotNull(email.emailDate());
+    }
+
+    @Test
+    public void bookTicketSquared() {
+
+        Email email = TimeIt.printTime(() -> ObservableUtils.toObject(reservationBL.reserveTicketSquared("CK238", "45")));
         assertEquals("CK238", email.ticket().flight().flightNumber());
         assertNotNull(email.ticket().date());
 

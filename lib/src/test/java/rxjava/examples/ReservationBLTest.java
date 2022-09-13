@@ -19,4 +19,5 @@ public class ReservationBLTest {
 
         assertNotNull(email.emailDate());
     }
+
 }

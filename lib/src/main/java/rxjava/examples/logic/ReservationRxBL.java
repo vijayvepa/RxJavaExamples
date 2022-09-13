@@ -1,5 +1,6 @@
 package rxjava.examples.logic;
 
+import org.apache.commons.lang3.tuple.Pair;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import rxjava.examples.model.Email;
@@ -22,14 +23,6 @@ public class ReservationRxBL {
         return sendEmail(ticketObservable);
     }
 
-    public Observable<Email> reserveTicketParallel(String flightNumber, String passengerId){
-
-        Observable<Flight> flightObservable = lookupFlight(flightNumber).subscribeOn(Schedulers.io());
-        Observable<Passenger> passengerObservable = lookupPassenger(passengerId).subscribeOn(Schedulers.io());
-        Observable<Ticket> ticketObservable = bookTicket(flightObservable, passengerObservable);
-        return sendEmail(ticketObservable);
-    }
-
     Observable<Flight> lookupFlight(String flightNumber){
         return Observable.defer(()->
                 Observable.just(reservationBL.lookupFlight(flightNumber)));
@@ -47,5 +40,30 @@ public class ReservationRxBL {
 
     Observable<Email> sendEmail(Observable<Ticket> ticket){
         return ticket.map(reservationBL::sendEmail);
+    }
+
+    Observable<Ticket> bookTicketSquared(Observable<Flight> flight, Observable<Passenger> passenger){
+        return flight.zipWith(passenger, Pair::of).flatMap(pair-> bookTicketFrom(pair.getLeft(),pair.getRight()));
+    }
+
+    Observable<Ticket> bookTicketFrom(Flight flight, Passenger passenger){
+        return Observable.defer(()->
+                Observable.just(reservationBL.bookTicket(flight, passenger)));
+    }
+
+    public Observable<Email> reserveTicketParallel(String flightNumber, String passengerId){
+
+        Observable<Flight> flightObservable = lookupFlight(flightNumber).subscribeOn(Schedulers.io());
+        Observable<Passenger> passengerObservable = lookupPassenger(passengerId).subscribeOn(Schedulers.io());
+        Observable<Ticket> ticketObservable = bookTicket(flightObservable, passengerObservable);
+        return sendEmail(ticketObservable);
+    }
+
+    public Observable<Email> reserveTicketSquared(String flightNumber, String passengerId){
+
+        Observable<Flight> flightObservable = lookupFlight(flightNumber).subscribeOn(Schedulers.io());
+        Observable<Passenger> passengerObservable = lookupPassenger(passengerId).subscribeOn(Schedulers.io());
+        Observable<Ticket> ticketObservable = bookTicketSquared(flightObservable, passengerObservable);
+        return sendEmail(ticketObservable);
     }
 }

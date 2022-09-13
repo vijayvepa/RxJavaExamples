@@ -26,6 +26,9 @@ dependencies {
     annotationProcessor  'org.projectlombok:lombok:1.18.24'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
     implementation 'io.github.benas:random-beans:3.9.0'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
 }
 
 tasks.named('test') {
