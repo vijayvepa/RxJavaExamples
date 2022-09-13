@@ -5,6 +5,6 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(fluent = true)
-public class Person {
-    boolean hasActivity;
+public class Book {
+    String title;
 }
