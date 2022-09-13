@@ -1,14 +1,10 @@
 package rxjava.examples.logic;
 
 import rx.Observable;
-import rxjava.examples.ObservableUtils;
 import rxjava.examples.dataaccess.PersonDao;
 import rxjava.examples.model.Person;
-import rxjava.examples.model.PersonDetails;
 
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class PersonRxBL {
     final PersonDao personDao;

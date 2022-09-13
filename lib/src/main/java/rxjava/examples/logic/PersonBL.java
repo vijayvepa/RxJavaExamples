@@ -1,6 +1,5 @@
 package rxjava.examples.logic;
 
-import rx.Observable;
 import rxjava.examples.ObservableUtils;
 import rxjava.examples.dataaccess.PersonDao;
 import rxjava.examples.model.Person;
