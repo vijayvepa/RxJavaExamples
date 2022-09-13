@@ -18,7 +18,7 @@ public class ReservationBL {
         enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandom();
     }
 
-    public Email reserveTicket(String flightNumber, String passengerId){
+    public Email reserveTicket(String flightNumber, String passengerId) {
 
         Flight flight = lookupFlight(flightNumber);
         Passenger passenger = lookupPassenger(passengerId);
@@ -27,33 +27,33 @@ public class ReservationBL {
     }
 
     @SneakyThrows
-    private Email sendEmail(Ticket ticket) {
-
-        System.out.println("Sending email...");
-        Thread.sleep(500);
-        return new Email().ticket(ticket).emailDate(LocalDateTime.now().toString());
-    }
-
-    @SneakyThrows
-    private Ticket bookTicket(Flight flight, Passenger passenger) {
-        System.out.println("Booking ticket...");
+    Flight lookupFlight(String flightNumber) {
+        System.out.println("Looking up flight details...");
         Thread.sleep(3000);
-        return new Ticket().flight(flight).passenger(passenger).date(LocalDateTime.now().toString());
+
+        return new Flight().flightNumber(flightNumber);
     }
 
     @SneakyThrows
-    private Passenger lookupPassenger(String passengerId) {
+    Passenger lookupPassenger(String passengerId) {
         System.out.println("Looking up passenger...");
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         return enhancedRandom.nextObject(Passenger.class).passengerId(passengerId);
 
     }
 
     @SneakyThrows
-    private Flight lookupFlight(String flightNumber) {
-        System.out.println("Looking up flight details...");
+    Ticket bookTicket(Flight flight, Passenger passenger) {
+        System.out.println("Booking ticket...");
         Thread.sleep(1000);
+        return new Ticket().flight(flight).passenger(passenger).date(LocalDateTime.now().toString());
+    }
 
-        return new Flight().flightNumber(flightNumber);
+    @SneakyThrows
+    Email sendEmail(Ticket ticket) {
+
+        System.out.println("Sending email...");
+        Thread.sleep(500);
+        return new Email().ticket(ticket).emailDate(LocalDateTime.now().toString());
     }
 }

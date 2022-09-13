@@ -2,7 +2,6 @@ package rxjava.examples;
 
 import rx.Observable;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ObservableUtils {
@@ -15,6 +14,6 @@ public class ObservableUtils {
     }
 
     public static <T> Observable<T> fromObject(T object){
-        return Observable.from(Collections.singletonList(object));
+        return Observable.just(object);
     }
 }
