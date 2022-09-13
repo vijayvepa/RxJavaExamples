@@ -33,7 +33,7 @@ public class PersonDao {
         return Collections.emptyList();
     }
 
-    public List<Person> listPeople(int page){
+    public List<Person> listPeopleByPage(int page){
         return query(Queries.SELECT_PAGE, PAGE_SIZE, page * PAGE_SIZE);
     }
 }

@@ -34,22 +34,32 @@ public class PersonBLTest {
 
 
     @Test
-    void getSpecifiedNumberOfPeople_with3Requested(){
-        List<Person> specifiedNumberOfPeople = personBL.getSpecifiedNumberOfPeople(3);
+    void getSpecifiedNumberOfPeopleRecursive_with3Requested(){
+        List<Person> specifiedNumberOfPeople = personBL.getSpecifiedNumberOfPeopleRecursive(3);
 
         assertEquals(3, specifiedNumberOfPeople.size());
         ArgumentCaptor<Integer> pageCaptor = ArgumentCaptor.forClass(Integer.class);
-        Mockito.verify(personDao, Mockito.times(1)).listPeople(pageCaptor.capture());
+        Mockito.verify(personDao, Mockito.times(1)).listPeopleByPage(pageCaptor.capture());
         assertEquals(1, pageCaptor.getAllValues().size());
     }
 
     @Test
-    void getSpecifiedNumberOfPeople_with25Requested(){
-        List<Person> specifiedNumberOfPeople = personBL.getSpecifiedNumberOfPeople(25);
+    void getSpecifiedNumberOfPeopleRecursive_with25Requested(){
+        List<Person> specifiedNumberOfPeople = personBL.getSpecifiedNumberOfPeopleRecursive(25);
 
         assertEquals(25, specifiedNumberOfPeople.size());
         ArgumentCaptor<Integer> pageCaptor = ArgumentCaptor.forClass(Integer.class);
-        Mockito.verify(personDao, Mockito.times(3)).listPeople(pageCaptor.capture());
+        Mockito.verify(personDao, Mockito.times(3)).listPeopleByPage(pageCaptor.capture());
+        assertEquals(3, pageCaptor.getAllValues().size());
+    }
+
+    @Test
+    void getSpecifiedNumberOfPeopleAlt_with25Requested(){
+        List<Person> specifiedNumberOfPeople = personBL.getSpecifiedNumberOfPeopleAlt(25);
+
+        assertEquals(25, specifiedNumberOfPeople.size());
+        ArgumentCaptor<Integer> pageCaptor = ArgumentCaptor.forClass(Integer.class);
+        Mockito.verify(personDao, Mockito.times(3)).listPeopleByPage(pageCaptor.capture());
         assertEquals(3, pageCaptor.getAllValues().size());
     }
 }

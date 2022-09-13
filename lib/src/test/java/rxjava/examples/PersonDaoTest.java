@@ -19,7 +19,7 @@ public class PersonDaoTest {
 
     @Test
     void listPeople_withPage0_Test(){
-        List<Person> people = personDao.listPeople(0);
+        List<Person> people = personDao.listPeopleByPage(0);
 
         assertEquals(10, people.size());
         assertEquals(5, people.get(5).id());
@@ -27,7 +27,7 @@ public class PersonDaoTest {
 
     @Test
     void listPeople_withPage1_Test(){
-        List<Person> people = personDao.listPeople(1);
+        List<Person> people = personDao.listPeopleByPage(1);
 
         assertEquals(10, people.size());
         assertEquals(15, people.get(5).id());
