@@ -9,3 +9,4 @@
 
 rootProject.name = 'RxJavaRefactoringExample'
 include('lib')
+include 'activemq'
