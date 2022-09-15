@@ -14,7 +14,7 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
 import javax.jms.ConnectionFactory;
-
+import java.util.stream.IntStream;
 
 
 @SpringBootApplication
@@ -56,7 +56,7 @@ public class ActivemqExampleApplication {
 		JmsTemplate jmsTemplate =context.getBean(JmsTemplate.class);
 
 		System.out.println("Sending an email message");
-		jmsTemplate.convertAndSend("mailbox'", new Email("info@example.com", "hello"));
+		jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "hello"));
 
 		// Send a message with a POJO - the template reuse the message converter
 		System.out.println("Sending an email message.");
@@ -65,6 +65,15 @@ public class ActivemqExampleApplication {
 		// Send a message with a POJO - the template reuse the message converter
 		System.out.println("Sending an email message.");
 		jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
+
+
+		IntStream.range(0, 10).forEach(i->
+				{
+					System.out.println("Sending an rx email message" +  i);
+					jmsTemplate.convertAndSend("rxmailbox", new Email("info@example.com", "hello" + i));
+				}
+		);
+
 	}
 
 }
