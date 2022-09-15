@@ -58,11 +58,10 @@ public class ActivemqExampleApplication {
 		System.out.println("Sending an email message");
 		jmsTemplate.convertAndSend("mailbox'", new Email("info@example.com", "hello"));
 
-
-
 		// Send a message with a POJO - the template reuse the message converter
 		System.out.println("Sending an email message.");
 		jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
+
 		// Send a message with a POJO - the template reuse the message converter
 		System.out.println("Sending an email message.");
 		jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
