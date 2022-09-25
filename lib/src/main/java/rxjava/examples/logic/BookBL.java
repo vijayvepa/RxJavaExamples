@@ -1,12 +1,24 @@
 package rxjava.examples.logic;
 
 import rx.Observable;
-import rxjava.examples.model.CannotRecommendBookException;
 import rxjava.examples.ObservableUtils;
 import rxjava.examples.model.Book;
+import rxjava.examples.model.CannotRecommendBookException;
 import rxjava.examples.model.Person;
 
+import java.util.Random;
+
 public class BookBL {
+
+    private int bookLength;
+
+    private final Random random;
+
+    public BookBL() {
+        random = new Random();
+        bookLength = 1;
+    }
+
     public Observable<Book> bestBookFor(Person person) {
         return tryRecommendBook(person).onErrorResumeNext(bestSeller());
     }
@@ -30,5 +42,13 @@ public class BookBL {
 
     private boolean hasEnoughData(Person person) {
         return person.hasActivity();
+    }
+
+    public void incrementBookLength(){
+        bookLength += random.nextInt(5);
+    }
+
+    public int getOrderBookLength(){
+        return bookLength;
     }
 }

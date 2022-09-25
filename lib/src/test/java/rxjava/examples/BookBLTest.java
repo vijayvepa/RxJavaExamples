@@ -6,7 +6,13 @@ import rxjava.examples.logic.BookBL;
 import rxjava.examples.model.Book;
 import rxjava.examples.model.Person;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BookBLTest {
 
@@ -26,5 +32,21 @@ public class BookBLTest {
         Book book1 = ObservableUtils.toObject(book);
 
         assertEquals("best-seller", book1.title());
+    }
+
+    @SuppressWarnings("Convert2MethodRef")
+    @Test
+    void bookBLGetOrderBookLength_randomTest(){
+        List<Integer> bookLengths = new ArrayList<>();
+
+        IntStream.range(0, 10).forEach(i-> {
+                    bookBL.incrementBookLength();
+                    bookLengths.add(bookBL.getOrderBookLength());
+                }
+        );
+
+        String  joinedString = bookLengths.stream().map(x->x.toString()).collect(Collectors.joining(","));
+        System.out.println(joinedString);
+        assertNotNull(joinedString);
     }
 }
