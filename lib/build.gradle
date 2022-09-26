@@ -30,6 +30,9 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    // https://mvnrepository.com/artifact/org.jeasy/easy-random-randomizers
+    implementation 'org.jeasy:easy-random-randomizers:5.0.0'
+
 
 }
 
