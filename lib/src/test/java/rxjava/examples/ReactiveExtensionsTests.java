@@ -3,10 +3,15 @@ package rxjava.examples;
 import org.junit.jupiter.api.Test;
 import rx.Observable;
 import rx.Subscriber;
+import rxjava.examples.samples.ReactiveExtensions;
+
+import java.util.concurrent.TimeUnit;
 
 import static rxjava.examples.Log.log;
 
 public class ReactiveExtensionsTests {
+
+    private final ReactiveExtensions reactiveExtensions = new ReactiveExtensions();
 
     @Test
     public void rangeTest(){
@@ -71,4 +76,66 @@ public class ReactiveExtensionsTests {
         ints.subscribe(i-> log("Element B:" + i) );
         log("Exit");
     }
+
+    @Test
+    public void delayedTest1(){
+        Observable<Integer> delayed = reactiveExtensions.delayed(10);
+
+        delayed.subscribe(System.out::println);
+
+        long startTime = System.currentTimeMillis();
+        delayed.subscribe(s-> {
+                    while (System.currentTimeMillis() - startTime < 1000) {
+
+                        log("Waiting for 100 ms");
+                        reactiveExtensions.sleep(100, TimeUnit.MILLISECONDS);
+                    }
+                    log("Received" + s);
+                }
+        );
+
+        reactiveExtensions.sleep(11, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void delayedTest2(){
+        Observable<Integer> delayed = reactiveExtensions.delayed(10);
+
+        delayed.subscribe(System.out::println);
+
+        long startTime = System.currentTimeMillis();
+        delayed.subscribe(s-> {
+                    while (System.currentTimeMillis() - startTime < 1000) {
+
+                        log("Waiting for 100 ms");
+                        reactiveExtensions.sleep(100, TimeUnit.MILLISECONDS);
+                    }
+                    log("Received" + s);
+                }
+        );
+
+        reactiveExtensions.sleep(1, TimeUnit.SECONDS);
+    }
+
+    @Test
+    void timedObservableTest(){
+        reactiveExtensions.timedObservable().subscribe(Log::log);
+        reactiveExtensions.sleep(2, TimeUnit.SECONDS);
+    }
+
+    @Test
+    void intervalObservableTest(){
+        reactiveExtensions.intervalBasedObservable().subscribe(Log::log);
+        reactiveExtensions.sleep(2, TimeUnit.SECONDS);
+
+    }
+
+    @Test
+    void scheduleAtFixedRateTest(){
+        reactiveExtensions.scheduleAtFixedRate(()->log("."));
+        reactiveExtensions.sleep(2, TimeUnit.SECONDS);
+
+    }
+
+
 }
