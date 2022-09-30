@@ -1,10 +1,26 @@
 package twitter4jexample;
 
 import rx.Observable;
+import rx.observables.ConnectableObservable;
 import rx.subjects.PublishSubject;
 import twitter4j.*;
 
 public class TwitterSubject {
+
+    public static void main(String[] args) {
+        TwitterSubject twitterSubject = new TwitterSubject();
+        Observable<Status> tweets = twitterSubject.observe();
+
+        tweets.doOnNext(twitterSubject::saveStatus);
+
+        ConnectableObservable<Status> publish = tweets.publish();
+        publish.connect();
+    }
+
+    private void saveStatus(Status status) {
+        System.out.println("Save to db " + status);
+    }
+
     private final PublishSubject<Status> subject = PublishSubject.create();
 
     TwitterSubject(){
