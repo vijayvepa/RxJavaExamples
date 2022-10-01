@@ -3,7 +3,7 @@ package rxjava.examples;
 import org.junit.jupiter.api.Test;
 import rx.Observable;
 import rxjava.examples.model.*;
-import rxjava.examples.samples.OperatorsAndTransformations;
+import rxjava.examples.samples.Transformations;
 import rxjava.examples.utils.MorseCodeUtils;
 
 import java.math.BigInteger;
@@ -11,9 +11,12 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import static rxjava.examples.samples.OperatorsAndTransformations.randomInts;
+import static rxjava.examples.samples.Transformations.randomInts;
+import static rxjava.examples.samples.Transformations.speak;
 
 public class TransformationTests {
 
@@ -110,13 +113,13 @@ public class TransformationTests {
 
     @Test
     void testDayOfWeekDelay() throws InterruptedException {
-        Observable.just(DayOfWeek.SUNDAY, DayOfWeek.MONDAY).flatMap(OperatorsAndTransformations::loadRecordsFor).subscribe(System.out::println);
+        Observable.just(DayOfWeek.SUNDAY, DayOfWeek.MONDAY).flatMap(Transformations::loadRecordsFor).subscribe(System.out::println);
         TimeUnit.SECONDS.sleep(10);
     }
 
     @Test
     void testDayOfWeekDelayPreserveOrder() throws InterruptedException {
-        Observable.just(DayOfWeek.SUNDAY, DayOfWeek.MONDAY).concatMap(OperatorsAndTransformations::loadRecordsFor).subscribe(System.out::println);
+        Observable.just(DayOfWeek.SUNDAY, DayOfWeek.MONDAY).concatMap(Transformations::loadRecordsFor).subscribe(System.out::println);
         TimeUnit.SECONDS.sleep(10);
     }
 
@@ -273,8 +276,8 @@ public class TransformationTests {
 
         //the earliest of the two, regardless of frequency
         Observable.amb(
-                OperatorsAndTransformations.stream(100, 17, "S"),
-                OperatorsAndTransformations.stream(200, 10, "F")
+                Transformations.stream(100, 17, "S"),
+                Transformations.stream(200, 10, "F")
         ).subscribe(System.out::println);
 
         Thread.sleep(1000);
@@ -284,8 +287,8 @@ public class TransformationTests {
     void ambExample2() throws InterruptedException {
 
         //the earliest of the two, regardless of frequency
-        OperatorsAndTransformations.stream(100, 17, "S").ambWith(
-                        OperatorsAndTransformations.stream(200, 10, "F"))
+        Transformations.stream(100, 17, "S").ambWith(
+                        Transformations.stream(200, 10, "F"))
                 .subscribe(System.out::println);
 
         Thread.sleep(1000);
@@ -409,4 +412,68 @@ public class TransformationTests {
     }
 
 
+    @Test
+    void speakTest() throws InterruptedException {
+        Transformations.speak("A is better than B", 100).subscribe(System.out::println);
+
+        Thread.sleep(5000);
+    }
+
+    @Test
+    void mergeTest() throws InterruptedException {
+        Observable<String> alice = speak("To be, or not to be: that is the question", 110);
+        Observable<String> bob = speak("Though this be madness, yet there is madness in't", 90);
+        Observable<String> jane = speak("There are more things in Heaven and Earth, Horatio, than are dreamt of in your philiosophy", 100);
+
+        Observable.merge(alice.map(w -> "Alice:" + w), bob.map(w -> "Bob:" + w), jane.map(w -> "Jane:" + w)).subscribe(System.out::println);
+        Thread.sleep(5000);
+    }
+
+    @Test
+    void concatTest() throws InterruptedException {
+        Observable<String> alice = speak("To be, or not to be: that is the question", 110);
+        Observable<String> bob = speak("Though this be madness, yet there is madness in't", 90);
+        Observable<String> jane = speak("There are more things in Heaven and Earth, Horatio, than are dreamt of in your philosophy", 100);
+
+        Observable.concat(alice.map(w -> "Alice:" + w), bob.map(w -> "Bob:" + w), jane.map(w -> "Jane:" + w)).subscribe(System.out::println);
+        Thread.sleep(10000);
+    }
+
+    @Test
+    void switchOnNextTest() throws InterruptedException {
+        Random random = new Random();
+
+        Observable<String> alice = speak("To be, or not to be: that is the question", 110);
+        Observable<String> bob = speak("Though this be madness, yet there is madness in't", 90);
+        Observable<String> jane = speak("There are more things in Heaven and Earth, Horatio, than are dreamt of in your philiosophy", 100);
+
+        Observable<Observable<String>> quotes =
+                Observable.just(alice.map(w -> "Alice:" + w), bob.map(w -> "Bob:" + w), jane.map(w -> "Jane:" + w))
+                        .flatMap(innerObs -> Observable.just(innerObs).delay(random.nextInt(5), TimeUnit.SECONDS));
+
+        Observable.switchOnNext(quotes).subscribe(System.out::println);
+        Thread.sleep(20000);
+    }
+
+    @Test
+    void transformerTest() {
+        Observable<Character> alphabet = Observable.range(0, 'Z' - 'A' + 1).map(c -> (char) ('A' + c));
+
+        alphabet.compose(Transformations.odd()).forEach(System.out::println);
+
+    }
+
+    @Test
+    void bufferTest() {
+        Observable.range(1, 9).buffer(1, 2)
+                .doOnNext(x -> System.out.println("Buffer" + x))
+                .concatMapIterable(x -> x).doOnNext(x -> System.out.println("Iterable:" + x))
+                .map(Objects::toString).subscribe(System.out::println);
+    }
+
+    @Test
+    void customOperatorTest() {
+        Observable.range(1, 4).repeat().lift(Transformations.toStringOfOdd()).take(3)
+                .subscribe(System.out::println, Throwable::printStackTrace, () -> System.out.println("Completed"));
+    }
 }
