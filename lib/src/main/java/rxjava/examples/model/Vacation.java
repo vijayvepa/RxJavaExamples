@@ -14,15 +14,15 @@ public class Vacation {
         this.when = when;
     }
 
-    public Observable<Weather> weather(){
+    public Observable<Weather> weather() {
         return Observable.empty();
     }
 
-    public Observable<Flight> flightFrom(City city)  {
+    public Observable<Flight> flightFrom(City city) {
         return Observable.empty();
     }
 
-    public Observable<Hotel> hotel()  {
+    public Observable<Hotel> hotel() {
         return Observable.empty();
     }
 

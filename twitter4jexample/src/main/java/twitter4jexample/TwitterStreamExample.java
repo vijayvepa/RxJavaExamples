@@ -11,7 +11,7 @@ public class TwitterStreamExample {
         TwitterStreamExample twitterStreamExample = new TwitterStreamExample();
         twitterStreamExample.start();
         twitterStreamExample.consume((status, stream) -> System.out.println("Status: " + status),
-                (ex,stream) -> System.err.println("Error:" + ex));
+                (ex, stream) -> System.err.println("Error:" + ex));
 
     }
 
@@ -59,7 +59,7 @@ public class TwitterStreamExample {
         twitterStream.shutdown();
     }
 
-    TwitterStream consume(BiConsumer<Status, TwitterStream> onStatus, BiConsumer<Exception, TwitterStream> onException){
+    TwitterStream consume(BiConsumer<Status, TwitterStream> onStatus, BiConsumer<Exception, TwitterStream> onException) {
         TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
         twitterStream.addListener(new StatusListener() {
             @Override

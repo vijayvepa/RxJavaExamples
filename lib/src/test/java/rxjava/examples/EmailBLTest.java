@@ -17,7 +17,7 @@ public class EmailBLTest {
     private final EmailBL emailBL = new EmailBL();
 
     @Test
-    public void bulkSendEmail(){
+    public void bulkSendEmail() {
         List<Ticket> tickets = IntStream.range(0, 10).mapToObj(x -> new Ticket()).collect(Collectors.toList());
         Pair<List<Email>, List<Ticket>> bulkSendEmail = emailBL.bulkSendEmail(tickets);
 

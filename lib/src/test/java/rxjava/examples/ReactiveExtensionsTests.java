@@ -14,14 +14,14 @@ public class ReactiveExtensionsTests {
     private final ReactiveExtensions reactiveExtensions = new ReactiveExtensions();
 
     @Test
-    public void rangeTest(){
+    public void rangeTest() {
         log("Before");
-        Observable.range(5,3).subscribe(Log::log);
+        Observable.range(5, 3).subscribe(Log::log);
         log("After");
     }
 
     @Test
-    public void lowLevelRangeTest(){
+    public void lowLevelRangeTest() {
         Observable<Integer> ints = Observable
                 .create(new Observable.OnSubscribe<Integer>() {
                     @Override
@@ -36,13 +36,13 @@ public class ReactiveExtensionsTests {
                 });
 
         log("Starting");
-        ints.subscribe(i-> log("Element" + i) );
+        ints.subscribe(i -> log("Element" + i));
         log("Exit");
     }
 
 
     @Test
-    public void multipleSubscribersTest(){
+    public void multipleSubscribersTest() {
         Observable<Integer> ints = Observable
                 .create(new Observable.OnSubscribe<Integer>() {
                     @Override
@@ -54,13 +54,13 @@ public class ReactiveExtensionsTests {
                 });
 
         log("Starting");
-        ints.subscribe(i-> log("Element A:" + i) );
-        ints.subscribe(i-> log("Element B:" + i) );
+        ints.subscribe(i -> log("Element A:" + i));
+        ints.subscribe(i -> log("Element B:" + i));
         log("Exit");
     }
 
     @Test
-    public void multipleSubscribersWithCacheTest(){
+    public void multipleSubscribersWithCacheTest() {
         Observable<Integer> ints = Observable
                 .create(new Observable.OnSubscribe<Integer>() {
                     @Override
@@ -72,19 +72,19 @@ public class ReactiveExtensionsTests {
                 }).cache();
 
         log("Starting");
-        ints.subscribe(i-> log("Element A:" + i) );
-        ints.subscribe(i-> log("Element B:" + i) );
+        ints.subscribe(i -> log("Element A:" + i));
+        ints.subscribe(i -> log("Element B:" + i));
         log("Exit");
     }
 
     @Test
-    public void delayedTest1(){
+    public void delayedTest1() {
         Observable<Integer> delayed = reactiveExtensions.delayed(10);
 
         delayed.subscribe(System.out::println);
 
         long startTime = System.currentTimeMillis();
-        delayed.subscribe(s-> {
+        delayed.subscribe(s -> {
                     while (System.currentTimeMillis() - startTime < 1000) {
 
                         log("Waiting for 100 ms");
@@ -98,13 +98,13 @@ public class ReactiveExtensionsTests {
     }
 
     @Test
-    public void delayedTest2(){
+    public void delayedTest2() {
         Observable<Integer> delayed = reactiveExtensions.delayed(10);
 
         delayed.subscribe(System.out::println);
 
         long startTime = System.currentTimeMillis();
-        delayed.subscribe(s-> {
+        delayed.subscribe(s -> {
                     while (System.currentTimeMillis() - startTime < 1000) {
 
                         log("Waiting for 100 ms");
@@ -118,21 +118,21 @@ public class ReactiveExtensionsTests {
     }
 
     @Test
-    void timedObservableTest(){
+    void timedObservableTest() {
         reactiveExtensions.timedObservable().subscribe(Log::log);
         reactiveExtensions.sleep(2, TimeUnit.SECONDS);
     }
 
     @Test
-    void intervalObservableTest(){
+    void intervalObservableTest() {
         reactiveExtensions.intervalBasedObservable().subscribe(Log::log);
         reactiveExtensions.sleep(2, TimeUnit.SECONDS);
 
     }
 
     @Test
-    void scheduleAtFixedRateTest(){
-        reactiveExtensions.scheduleAtFixedRate(()->log("."));
+    void scheduleAtFixedRateTest() {
+        reactiveExtensions.scheduleAtFixedRate(() -> log("."));
         reactiveExtensions.sleep(2, TimeUnit.SECONDS);
 
     }

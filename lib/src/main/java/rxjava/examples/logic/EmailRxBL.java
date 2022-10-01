@@ -29,7 +29,7 @@ public class EmailRxBL {
                 ).toList().toBlocking().single();
     }
 
-    public List<EmailOrFailed> bulkSendEmailParallel(List<Ticket> tickets){
+    public List<EmailOrFailed> bulkSendEmailParallel(List<Ticket> tickets) {
         return Observable.from(tickets)
                 .flatMap(ticket ->
                         trySendEmail(ticket)

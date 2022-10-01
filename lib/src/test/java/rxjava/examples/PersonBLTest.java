@@ -34,7 +34,7 @@ public class PersonBLTest {
 
 
     @Test
-    void getSpecifiedNumberOfPeopleRecursive_with3Requested(){
+    void getSpecifiedNumberOfPeopleRecursive_with3Requested() {
         List<Person> specifiedNumberOfPeople = personBL.getSpecifiedNumberOfPeopleRecursive(3);
 
         assertEquals(3, specifiedNumberOfPeople.size());
@@ -44,7 +44,7 @@ public class PersonBLTest {
     }
 
     @Test
-    void getSpecifiedNumberOfPeopleRecursive_with25Requested(){
+    void getSpecifiedNumberOfPeopleRecursive_with25Requested() {
         List<Person> specifiedNumberOfPeople = personBL.getSpecifiedNumberOfPeopleRecursive(25);
 
         assertEquals(25, specifiedNumberOfPeople.size());
@@ -54,7 +54,7 @@ public class PersonBLTest {
     }
 
     @Test
-    void getSpecifiedNumberOfPeopleAlt_with25Requested(){
+    void getSpecifiedNumberOfPeopleAlt_with25Requested() {
         List<Person> specifiedNumberOfPeople = personBL.getSpecifiedNumberOfPeopleAlt(25);
 
         assertEquals(25, specifiedNumberOfPeople.size());

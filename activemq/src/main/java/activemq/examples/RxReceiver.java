@@ -11,15 +11,15 @@ public class RxReceiver {
     private final PublishSubject<Email> emailPublishSubject;
 
     public RxReceiver() {
-        emailPublishSubject =  PublishSubject.create();
+        emailPublishSubject = PublishSubject.create();
     }
 
-    Observable<Email> observe(){
+    Observable<Email> observe() {
         return emailPublishSubject;
     }
 
-    @JmsListener(destination = "rxmailbox",containerFactory = "myFactory")
-    public void receiveMessage(Email email){
+    @JmsListener(destination = "rxmailbox", containerFactory = "myFactory")
+    public void receiveMessage(Email email) {
 
         emailPublishSubject.onNext(email);
     }

@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PersonDaoTest {
     private final PersonDao personDao = new PersonDao();
+
     @Test
     void listPeopleTest() {
         List<Person> people = ObservableUtils.toList(personDao.listPeople());
@@ -18,7 +19,7 @@ public class PersonDaoTest {
     }
 
     @Test
-    void listPeople_withPage0_Test(){
+    void listPeople_withPage0_Test() {
         List<Person> people = personDao.listPeopleByPage(0);
 
         assertEquals(10, people.size());
@@ -26,7 +27,7 @@ public class PersonDaoTest {
     }
 
     @Test
-    void listPeople_withPage1_Test(){
+    void listPeople_withPage1_Test() {
         List<Person> people = personDao.listPeopleByPage(1);
 
         assertEquals(10, people.size());

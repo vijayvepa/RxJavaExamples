@@ -35,14 +35,15 @@ public class OperatorsAndTransformations {
                 .doOnUnsubscribe(() -> System.out.println("Unsubscribe from " + name));
     }
 
-    public static Observable<Integer> randomInts(){
-        return Observable.create(s->{
+    public static Observable<Integer> randomInts() {
+        return Observable.create(s -> {
             Random random = new Random();
 
-            while (!s.isUnsubscribed()){
+            while (!s.isUnsubscribed()) {
                 s.onNext(random.nextInt(1000));
             }
         });
     }
+
 }
 

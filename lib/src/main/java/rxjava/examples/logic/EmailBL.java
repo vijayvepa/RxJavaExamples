@@ -34,7 +34,7 @@ public class EmailBL {
         System.out.println("Sending email...");
         Thread.sleep(500);
 
-        if(random.nextInt()%5 == 0){
+        if (random.nextInt() % 5 == 0) {
             throw new EmailNotFoundException();
         }
 

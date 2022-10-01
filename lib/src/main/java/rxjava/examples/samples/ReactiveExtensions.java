@@ -21,11 +21,11 @@ public class ReactiveExtensions {
         tweetBL = new TweetBL();
     }
 
-    public  <T> Observable<T> delayed(T x){
+    public <T> Observable<T> delayed(T x) {
         return Observable.create(subscriber -> {
             Runnable r = () -> {
                 sleep(10, TimeUnit.SECONDS);
-                if(!subscriber.isUnsubscribed()){
+                if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext(x);
                     subscriber.onCompleted();
                 }
@@ -36,19 +36,19 @@ public class ReactiveExtensions {
         });
     }
 
-    Observable<Tweet> loadAll(Collection<Integer> ids){
+    Observable<Tweet> loadAll(Collection<Integer> ids) {
         return Observable.create(subscriber -> {
 
-            ExecutorService pool= Executors.newFixedThreadPool(10);
+            ExecutorService pool = Executors.newFixedThreadPool(10);
 
             AtomicInteger countDown = new AtomicInteger(ids.size());
 
             //Violates Rx contract
-            ids.forEach(id -> pool.submit(()->{
+            ids.forEach(id -> pool.submit(() -> {
                 final Tweet tweet = load(id);
                 subscriber.onNext(tweet);
 
-                if(countDown.decrementAndGet() == 0){
+                if (countDown.decrementAndGet() == 0) {
                     pool.shutdownNow();
                     subscriber.onCompleted();
                 }
@@ -62,23 +62,23 @@ public class ReactiveExtensions {
     }
 
     @SuppressWarnings("SameParameterValue")
-    public void sleep(int timeout, TimeUnit unit){
-        try{
+    public void sleep(int timeout, TimeUnit unit) {
+        try {
             unit.sleep(timeout);
-        }catch (InterruptedException ignore){
+        } catch (InterruptedException ignore) {
 
         }
     }
 
-    public Observable<Long> timedObservable(){
+    public Observable<Long> timedObservable() {
         return Observable.timer(1, TimeUnit.SECONDS);
     }
 
-    public Observable<Long> intervalBasedObservable(){
-        return Observable.interval(1_000_000/60, TimeUnit.MICROSECONDS);
+    public Observable<Long> intervalBasedObservable() {
+        return Observable.interval(1_000_000 / 60, TimeUnit.MICROSECONDS);
     }
 
-    public void scheduleAtFixedRate(Runnable command){
+    public void scheduleAtFixedRate(Runnable command) {
         ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(2);
         scheduledThreadPoolExecutor.scheduleAtFixedRate(command, 0, 10, TimeUnit.MILLISECONDS);
     }

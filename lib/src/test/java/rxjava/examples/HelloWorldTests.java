@@ -173,19 +173,19 @@ public class HelloWorldTests {
         }
     }
 
-    public Single<String> getDataA(){
-        return Single.<String>create(o-> {
+    public Single<String> getDataA() {
+        return Single.<String>create(o -> {
             sleepIgnore(5);
             o.onSuccess("DataA");
         }).subscribeOn(Schedulers.io());
     }
 
-    public Single<String> getDataB(){
+    public Single<String> getDataB() {
         return Single.just("DataB").subscribeOn(Schedulers.io());
     }
 
     @Test
-    public void singleTests(){
+    public void singleTests() {
 
         Single<String> dataA = getDataA();
         Single<String> dataB = getDataB();
@@ -198,38 +198,38 @@ public class HelloWorldTests {
 
     }
 
-    public Completable writeToDatabase(Object data){
-        return Completable.create(s-> {
+    public Completable writeToDatabase(Object data) {
+        return Completable.create(s -> {
             doAsyncWrite(data, () -> s.onCompleted(), error -> s.onError(error));
         });
     }
 
     private void doAsyncWrite(Object data, Action0 onCompleted, Consumer<Throwable> onError) {
-        try{
+        try {
             sleepIgnore(100);
-            if("0" != data) {
+            if ("0" != data) {
                 System.out.println("Write " + data + " to db");
                 onCompleted.call();
-            }else{
+            } else {
                 throw new RuntimeException("Something unexpected happened.");
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             onError.accept(ex);
         }
     }
 
     @Test
-    public void writeToDatabaseTest1(){
+    public void writeToDatabaseTest1() {
         Completable completable = writeToDatabase("1");
-        completable.subscribe(()->{
+        completable.subscribe(() -> {
             System.out.println("Subscriber Received Completed");
         });
     }
 
     @Test
-    public void writeToDatabaseTest2(){
+    public void writeToDatabaseTest2() {
         Completable completable = writeToDatabase("0");
-        completable.subscribe(()->{
+        completable.subscribe(() -> {
             System.out.println("Subscriber Received Completed");
         }, Throwable::printStackTrace);
     }

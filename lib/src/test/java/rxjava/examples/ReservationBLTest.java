@@ -11,9 +11,9 @@ public class ReservationBLTest {
     private final ReservationBL reservationBL = new ReservationBL();
 
     @Test
-    public void bookTicket(){
+    public void bookTicket() {
 
-        Email email = TimeIt.printTime(()->reservationBL.reserveTicket("CK238", "45"));
+        Email email = TimeIt.printTime(() -> reservationBL.reserveTicket("CK238", "45"));
         assertEquals("CK238", email.ticket().flight().flightNumber());
         assertNotNull(email.ticket().date());
 

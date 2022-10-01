@@ -36,8 +36,7 @@ public class BookRxBLTest {
     @Test
     void bookBLSynchronousObservableTest() throws InterruptedException {
         Observable<Integer> orderBookLength = bookRxBL.getOrderBookLength();
-        orderBookLength.map(x->"Subscribe Map to " + x).subscribeOn(Schedulers.io()).subscribe(System.out::println);
-
+        orderBookLength.map(x -> "Subscribe Map to " + x).subscribeOn(Schedulers.io()).subscribe(System.out::println);
 
 
         IntStream.range(0, 10).forEach(i -> {

@@ -18,7 +18,7 @@ public class LazyTwitterObservable {
         twitterStream.addListener(new StatusListener() {
             @Override
             public void onStatus(Status status) {
-                subscribers.forEach(s->s.onNext(status));
+                subscribers.forEach(s -> s.onNext(status));
             }
 
             @Override
@@ -43,7 +43,7 @@ public class LazyTwitterObservable {
 
             @Override
             public void onException(Exception ex) {
-                subscribers.forEach(s->s.onError(ex));
+                subscribers.forEach(s -> s.onError(ex));
 
             }
         });
@@ -51,22 +51,22 @@ public class LazyTwitterObservable {
 
     private final Observable<Status> observable = Observable.create(subscriber -> {
         register(subscriber);
-        subscriber.add(Subscriptions.create(()->this.deregister(subscriber)));
+        subscriber.add(Subscriptions.create(() -> this.deregister(subscriber)));
     });
 
-    private synchronized void register(Subscriber<? super Status> subscriber){
-        if(subscribers.isEmpty()){
+    private synchronized void register(Subscriber<? super Status> subscriber) {
+        if (subscribers.isEmpty()) {
             subscribers.add(subscriber);
             twitterStream.sample();
-        }else{
+        } else {
             subscribers.add(subscriber);
         }
     }
 
-    private synchronized void deregister(Subscriber<? super Status> subscriber){
+    private synchronized void deregister(Subscriber<? super Status> subscriber) {
         subscribers.remove(subscriber);
 
-        if(subscribers.isEmpty()){
+        if (subscribers.isEmpty()) {
             twitterStream.shutdown();
         }
     }

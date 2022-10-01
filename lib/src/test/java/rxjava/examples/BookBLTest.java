@@ -36,16 +36,16 @@ public class BookBLTest {
 
     @SuppressWarnings("Convert2MethodRef")
     @Test
-    void bookBLGetOrderBookLength_randomTest(){
+    void bookBLGetOrderBookLength_randomTest() {
         List<Integer> bookLengths = new ArrayList<>();
 
-        IntStream.range(0, 10).forEach(i-> {
+        IntStream.range(0, 10).forEach(i -> {
                     bookBL.incrementBookLength();
                     bookLengths.add(bookBL.getOrderBookLength());
                 }
         );
 
-        String  joinedString = bookLengths.stream().map(x->x.toString()).collect(Collectors.joining(","));
+        String joinedString = bookLengths.stream().map(x -> x.toString()).collect(Collectors.joining(","));
         System.out.println(joinedString);
         assertNotNull(joinedString);
     }

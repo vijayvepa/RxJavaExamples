@@ -10,7 +10,7 @@ public class TimeIt {
             long startTime = System.currentTimeMillis();
             call = task.call();
             long timeTaken = System.currentTimeMillis() - startTime;
-            System.out.print( "Took "  + timeTaken / 1000d + "s");
+            System.out.print("Took " + timeTaken / 1000d + "s");
         } catch (Exception e) {
             //...
         }

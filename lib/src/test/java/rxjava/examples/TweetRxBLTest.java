@@ -13,16 +13,17 @@ public class TweetRxBLTest {
 
     @Test
     void tweetSubscribeTest() throws InterruptedException {
-        Observable<Tweet> tweetObservable = tweetRxBL.tweetStream().subscribeOn(Schedulers.io());;
+        Observable<Tweet> tweetObservable = tweetRxBL.tweetStream().subscribeOn(Schedulers.io());
+        ;
 
-        tweetObservable.subscribe(System.out::println, Throwable::printStackTrace, ()->System.out.println("complete"));
+        tweetObservable.subscribe(System.out::println, Throwable::printStackTrace, () -> System.out.println("complete"));
         Thread.sleep(10000);
     }
 
     @Test
-
     void tweetObserverTest() throws InterruptedException {
-        Observable<Tweet> tweetObservable = tweetRxBL.tweetStream().subscribeOn(Schedulers.io());;
+        Observable<Tweet> tweetObservable = tweetRxBL.tweetStream().subscribeOn(Schedulers.io());
+        ;
 
         Observer<Tweet> observer = new Observer<>() {
             @Override
@@ -65,7 +66,7 @@ public class TweetRxBLTest {
             @Override
             public void onNext(Tweet tweet) {
 
-                if(tweet.getSequenceId().intValue() > 100){
+                if (tweet.getSequenceId().intValue() > 100) {
                     unsubscribe();
                 }
 
@@ -96,7 +97,7 @@ public class TweetRxBLTest {
             @Override
             public void onNext(Tweet tweet) {
 
-                if(tweet.getSequenceId().intValue() > 100){
+                if (tweet.getSequenceId().intValue() > 100) {
                     unsubscribe();
                 }
 

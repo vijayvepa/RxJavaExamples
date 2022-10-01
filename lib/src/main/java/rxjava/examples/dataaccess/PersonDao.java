@@ -1,7 +1,6 @@
 package rxjava.examples.dataaccess;
 
 
-
 import rx.Observable;
 import rxjava.examples.model.Person;
 
@@ -14,26 +13,26 @@ public class PersonDao {
 
     private static final int PAGE_SIZE = 10;
 
-    public Observable<Person> listPeople(){
-        return Observable.defer(()->Observable.from( query(Queries.SELECT_ALL)));
+    public Observable<Person> listPeople() {
+        return Observable.defer(() -> Observable.from(query(Queries.SELECT_ALL)));
     }
 
     @SuppressWarnings({"unused", "SameParameterValue"})
     private List<Person> query(String queryText, Object... params) {
-        if(queryText.equals(Queries.SELECT_ALL)) {
+        if (queryText.equals(Queries.SELECT_ALL)) {
             return IntStream.range(0, 1000).mapToObj(i -> new Person().id(i)).collect(Collectors.toList());
         }
-        if(queryText.equals(Queries.SELECT_PAGE)){
+        if (queryText.equals(Queries.SELECT_PAGE)) {
 
-            int start = (int)params[1];
-            int end = start + (int)params[0];
+            int start = (int) params[1];
+            int end = start + (int) params[0];
 
-            return IntStream.range(start, end).mapToObj(i->new Person().id(i)).collect(Collectors.toList());
+            return IntStream.range(start, end).mapToObj(i -> new Person().id(i)).collect(Collectors.toList());
         }
         return Collections.emptyList();
     }
 
-    public List<Person> listPeopleByPage(int page){
+    public List<Person> listPeopleByPage(int page) {
         return query(Queries.SELECT_PAGE, PAGE_SIZE, page * PAGE_SIZE);
     }
 }

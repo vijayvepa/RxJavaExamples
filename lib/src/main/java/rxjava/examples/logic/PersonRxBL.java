@@ -24,6 +24,7 @@ public class PersonRxBL {
                 .concatMap(Observable::from);
 
     }
+
     public Observable<Person> getAllPeopleRecursive(int initialPage) {
         return
                 Observable.defer(() -> Observable.from(personDao.listPeopleByPage(initialPage)))

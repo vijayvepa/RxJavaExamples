@@ -44,11 +44,11 @@ public class BookBL {
         return person.hasActivity();
     }
 
-    public void incrementBookLength(){
+    public void incrementBookLength() {
         bookLength += random.nextInt(5);
     }
 
-    public int getOrderBookLength(){
+    public int getOrderBookLength() {
         return bookLength;
     }
 }

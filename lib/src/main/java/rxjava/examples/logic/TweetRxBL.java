@@ -20,9 +20,9 @@ public class TweetRxBL {
         tweetBL = new TweetBL();
     }
 
-    public Observable<Tweet> tweetStream(){
-        return Observable.create(s->{
-            while (naturalNumbersIterator.hasNext()){
+    public Observable<Tweet> tweetStream() {
+        return Observable.create(s -> {
+            while (naturalNumbersIterator.hasNext()) {
                 BigInteger next = naturalNumbersIterator.next();
 
                 s.onNext(tweetBL.getTweet(next));
@@ -35,8 +35,8 @@ public class TweetRxBL {
         }, Emitter.BackpressureMode.NONE);
     }
 
-    public Observable<Tweet> tweetStreamWithUnsubscribe(){
-        return Observable.create(s->{
+    public Observable<Tweet> tweetStreamWithUnsubscribe() {
+        return Observable.create(s -> {
 
             Runnable r = () -> {
                 while (naturalNumbersIterator.hasNext()) {
@@ -63,24 +63,24 @@ public class TweetRxBL {
     private void sleepRandom() throws InterruptedException {
         int rand = random.nextInt(100);
 
-            Thread.sleep(rand);
+        Thread.sleep(rand);
     }
 
 
-    public Observable<Tweet> load(BigInteger id){
+    public Observable<Tweet> load(BigInteger id) {
         return Observable.create(subscriber -> {
-            try{
+            try {
                 subscriber.onNext(tweetBL.getTweet(id));
                 subscriber.onCompleted();
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 subscriber.onError(ex);
             }
         });
     }
 
 
-    public Observable<Tweet> callable(BigInteger id){
-        return Observable.fromCallable(()-> tweetBL.getTweet(id));
+    public Observable<Tweet> callable(BigInteger id) {
+        return Observable.fromCallable(() -> tweetBL.getTweet(id));
     }
 
 }

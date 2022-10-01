@@ -3,7 +3,7 @@ package rxjava.examples.logic;
 import java.math.BigInteger;
 import java.util.Iterator;
 
-public class NaturalNumbersIterator  implements Iterator<BigInteger> {
+public class NaturalNumbersIterator implements Iterator<BigInteger> {
 
     private BigInteger current = BigInteger.ZERO;
 

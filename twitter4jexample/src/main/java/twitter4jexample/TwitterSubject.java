@@ -23,7 +23,7 @@ public class TwitterSubject {
 
     private final PublishSubject<Status> subject = PublishSubject.create();
 
-    TwitterSubject(){
+    TwitterSubject() {
         TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
         twitterStream.addListener(new StatusListener() {
             @Override
@@ -61,7 +61,7 @@ public class TwitterSubject {
         twitterStream.sample();
     }
 
-    public Observable<Status> observe(){
+    public Observable<Status> observe() {
         return subject;
     }
 }

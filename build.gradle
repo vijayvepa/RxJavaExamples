@@ -1,4 +1,4 @@
-allprojects{
+allprojects {
 
     apply plugin: 'java'
     repositories {

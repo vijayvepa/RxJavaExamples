@@ -26,24 +26,24 @@ public class EmailFutureBL {
                 tickets.stream().map(ticket -> Pair.of(ticket, getSendEmailFuture(ticket)))
                         .collect(Collectors.toList());
 
-        List<Pair<Email, Ticket>> pairs= tasks.stream().flatMap(pair -> {
-            try{
+        List<Pair<Email, Ticket>> pairs = tasks.stream().flatMap(pair -> {
+            try {
                 Future<Email> future = pair.getRight();
                 Email email = future.get(1, TimeUnit.SECONDS);
-                return Stream.of(Pair.of(email, (Ticket)null));
-            }catch (Exception ex){
+                return Stream.of(Pair.of(email, (Ticket) null));
+            } catch (Exception ex) {
                 Ticket ticket = pair.getLeft();
                 System.err.println("Failed to send ticket " + ticket + " : " + ex);
-                return Stream.of(Pair.of((Email)null, ticket));
+                return Stream.of(Pair.of((Email) null, ticket));
             }
         }).collect(Collectors.toList());
 
-        List<Email> emails = pairs.stream().filter(x->x.getLeft() != null ).map(Pair::getLeft).collect(Collectors.toList());
-        List<Ticket> failures = pairs.stream().filter(x->x.getRight() != null ).map(Pair::getRight).collect(Collectors.toList());
+        List<Email> emails = pairs.stream().filter(x -> x.getLeft() != null).map(Pair::getLeft).collect(Collectors.toList());
+        List<Ticket> failures = pairs.stream().filter(x -> x.getRight() != null).map(Pair::getRight).collect(Collectors.toList());
         return Pair.of(emails, failures);
     }
 
     private Future<Email> getSendEmailFuture(Ticket ticket) {
-        return pool.submit(()->emailBL.trySendEmail(ticket));
+        return pool.submit(() -> emailBL.trySendEmail(ticket));
     }
 }

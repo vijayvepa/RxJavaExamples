@@ -26,7 +26,7 @@ public class Config implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     @Bean
-    public Observable<Status> observable(){
+    public Observable<Status> observable() {
         return observable;
     }
 

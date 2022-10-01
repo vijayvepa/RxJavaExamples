@@ -9,7 +9,7 @@ public class Foo {
 
     private final Log log;
 
-    public Foo(Observable<Status> tweets, Log log){
+    public Foo(Observable<Status> tweets, Log log) {
         this.log = log;
         tweets.subscribe(status -> log.info(status.getText()));
         log.info("Subscribed");

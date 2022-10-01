@@ -7,8 +7,8 @@ import static rxjava.examples.model.Sound.DAH;
 import static rxjava.examples.model.Sound.DI;
 
 public class MorseCodeUtils {
-    public static Observable<Sound> toMorseCode(char ch){
-        switch (ch){
+    public static Observable<Sound> toMorseCode(char ch) {
+        switch (ch) {
             case 'A':
                 return Observable.just(DI, DAH);
             case 'B':

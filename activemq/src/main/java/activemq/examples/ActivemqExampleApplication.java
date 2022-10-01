@@ -26,7 +26,7 @@ public class ActivemqExampleApplication {
      * This provides all boot's default to this factory, including the message converter
      *
      * @param connectionFactory cf
-     * @param configurer cf
+     * @param configurer        cf
      * @return jms
      */
     @Bean
@@ -37,43 +37,44 @@ public class ActivemqExampleApplication {
     }
 
 
-	/**
-	 * Serialize message content to json using TextMessage
-	 * @return message converter
-	 */
-	@Bean
-	public MessageConverter jacksonJmsMessageConverter(){
+    /**
+     * Serialize message content to json using TextMessage
+     *
+     * @return message converter
+     */
+    @Bean
+    public MessageConverter jacksonJmsMessageConverter() {
 
-		MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-		converter.setTargetType(MessageType.TEXT);
-		converter.setTypeIdPropertyName("_type");
-		return converter;
-	}
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("_type");
+        return converter;
+    }
 
-	public static void main(String[] args) {
-		ConfigurableApplicationContext context=
-			SpringApplication.run(ActivemqExampleApplication.class, args);
-		JmsTemplate jmsTemplate =context.getBean(JmsTemplate.class);
+    public static void main(String[] args) {
+        ConfigurableApplicationContext context =
+                SpringApplication.run(ActivemqExampleApplication.class, args);
+        JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
 
-		System.out.println("Sending an email message");
-		jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "hello"));
+        System.out.println("Sending an email message");
+        jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "hello"));
 
-		// Send a message with a POJO - the template reuse the message converter
-		System.out.println("Sending an email message.");
-		jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
+        // Send a message with a POJO - the template reuse the message converter
+        System.out.println("Sending an email message.");
+        jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
 
-		// Send a message with a POJO - the template reuse the message converter
-		System.out.println("Sending an email message.");
-		jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
+        // Send a message with a POJO - the template reuse the message converter
+        System.out.println("Sending an email message.");
+        jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
 
 
-		IntStream.range(0, 10).forEach(i->
-				{
-					System.out.println("Sending an rx email message" +  i);
-					jmsTemplate.convertAndSend("rxmailbox", new Email("info@example.com", "hello" + i));
-				}
-		);
+        IntStream.range(0, 10).forEach(i ->
+                {
+                    System.out.println("Sending an rx email message" + i);
+                    jmsTemplate.convertAndSend("rxmailbox", new Email("info@example.com", "hello" + i));
+                }
+        );
 
-	}
+    }
 
 }
