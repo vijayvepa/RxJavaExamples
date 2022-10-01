@@ -170,4 +170,97 @@ public class TransformationTests {
                 );
     }
 
+    @Test
+    void zipWithSynchronized() throws InterruptedException {
+        Observable<Long> red = Observable.interval(10, TimeUnit.MILLISECONDS);
+        Observable<Long> green = Observable.interval(10, TimeUnit.MILLISECONDS);
+
+        Observable.zip(red.timestamp(), green.timestamp(), (r, g) -> r.getTimestampMillis() - g.getTimestampMillis()).forEach(System.out::println);
+
+        Thread.sleep(1000);
+    }
+
+    @Test
+    void zipWithNonSynchronized() throws InterruptedException {
+        Observable<Long> red = Observable.interval(11, TimeUnit.MILLISECONDS);
+        Observable<Long> green = Observable.interval(10, TimeUnit.MILLISECONDS);
+
+        Observable.zip(red.timestamp(), green.timestamp(), (r, g) -> r.getTimestampMillis() - g.getTimestampMillis()).forEach(System.out::println);
+
+        Thread.sleep(1000);
+    }
+
+    @Test
+    void combineLatestNonSynchronized() throws InterruptedException {
+        Observable<Long> red = Observable.interval(11, TimeUnit.MILLISECONDS);
+        Observable<Long> green = Observable.interval(10, TimeUnit.MILLISECONDS);
+
+        Observable.combineLatest(red.timestamp(), green.timestamp(), (r, g) -> r.getTimestampMillis() - g.getTimestampMillis()).forEach(System.out::println);
+
+        Thread.sleep(1000);
+    }
+
+    @Test
+    void combineLatestExample() throws InterruptedException {
+        Observable<String> slow = Observable.interval(17, TimeUnit.MILLISECONDS).map(x -> "Slow" + x);
+        Observable<String> fast = Observable.interval(10, TimeUnit.MILLISECONDS).map(x -> "Fast" + x);
+
+        Observable.combineLatest(slow, fast, (s, f) -> f + ":" + s).subscribe(System.out::println);
+
+        Thread.sleep(1000);
+        /*
+        Fast0:Slow0
+        Fast0:Slow1
+        Fast1:Slow1
+         */
+    }
+
+    @Test
+    void combineLatestFromExample() throws InterruptedException {
+        Observable<String> slow = Observable.interval(17, TimeUnit.MILLISECONDS).map(x -> "Slow" + x);
+        Observable<String> fast = Observable.interval(10, TimeUnit.MILLISECONDS).map(x -> "Fast" + x);
+
+
+        slow.withLatestFrom(fast, (s, f) -> s + ":" + f).forEach(System.out::println);
+
+        Thread.sleep(1000);
+
+        /*
+        Slow0:Fast0
+        Slow1:Fast2
+        Slow2:Fast4
+        Slow3:Fast4
+         */
+    }
+
+    @Test
+    void combineLatestWithDummyEventsFromExample() throws InterruptedException {
+        Observable<String> slow = Observable.interval(17, TimeUnit.MILLISECONDS).map(x -> "Slow" + x);
+        Observable<String> fast = Observable.interval(10, TimeUnit.MILLISECONDS).map(x -> "Fast" + x).delay(100, TimeUnit.MILLISECONDS).startWith("Default");
+
+
+        slow.withLatestFrom(fast, (s, f) -> s + ":" + f).forEach(System.out::println);
+
+        Thread.sleep(1000);
+
+        /*
+        Slow0:Default
+        Slow1:Default
+        Slow2:Default
+        Slow3:Default
+        Slow4:Default
+        Slow5:Default
+        Slow6:Default
+        Slow7:Fast2
+        Slow8:Fast3
+        Slow9:Fast5
+        Slow10:Fast5
+         */
+    }
+
+    @Test
+    void startWithSimpleExample(){
+        Observable.just(1,2).startWith(0).subscribe(System.out::println);
+    }
+
 }
