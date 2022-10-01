@@ -3,12 +3,13 @@ package rxjava.examples.samples;
 import rx.Observable;
 
 import java.time.DayOfWeek;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class OperatorsAndTransformations {
 
-    public static Observable<String> loadRecordsFor(DayOfWeek day){
-        switch (day){
+    public static Observable<String> loadRecordsFor(DayOfWeek day) {
+        switch (day) {
             case SUNDAY:
                 return Observable.interval(90, TimeUnit.MILLISECONDS).take(5).map(i -> "Sun-" + i);
             case MONDAY:
@@ -27,5 +28,21 @@ public class OperatorsAndTransformations {
         }
     }
 
+    public static Observable<String> stream(int initDelay, int interval, String name) {
+        return Observable.interval(initDelay, interval, TimeUnit.MILLISECONDS)
+                .map(x -> name + x)
+                .doOnSubscribe(() -> System.out.println("Subscribe to " + name))
+                .doOnUnsubscribe(() -> System.out.println("Unsubscribe from " + name));
+    }
+
+    public static Observable<Integer> randomInts(){
+        return Observable.create(s->{
+            Random random = new Random();
+
+            while (!s.isUnsubscribed()){
+                s.onNext(random.nextInt(1000));
+            }
+        });
+    }
 }
 

@@ -6,9 +6,15 @@ import rxjava.examples.model.*;
 import rxjava.examples.samples.OperatorsAndTransformations;
 import rxjava.examples.utils.MorseCodeUtils;
 
+import java.math.BigInteger;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import static rxjava.examples.samples.OperatorsAndTransformations.randomInts;
 
 public class TransformationTests {
 
@@ -259,8 +265,150 @@ public class TransformationTests {
     }
 
     @Test
-    void startWithSimpleExample(){
-        Observable.just(1,2).startWith(0).subscribe(System.out::println);
+    void startWithSimpleExample() {
+        Observable.just(1, 2).startWith(0).subscribe(System.out::println);    //0,1,2
     }
+
+    @Test
+    void ambExample() throws InterruptedException {
+
+        //the earliest of the two, regardless of frequency
+        Observable.amb(
+                OperatorsAndTransformations.stream(100, 17, "S"),
+                OperatorsAndTransformations.stream(200, 10, "F")
+        ).subscribe(System.out::println);
+
+        Thread.sleep(1000);
+    }
+
+    @Test
+    void ambExample2() throws InterruptedException {
+
+        //the earliest of the two, regardless of frequency
+        OperatorsAndTransformations.stream(100, 17, "S").ambWith(
+                        OperatorsAndTransformations.stream(200, 10, "F"))
+                .subscribe(System.out::println);
+
+        Thread.sleep(1000);
+    }
+
+    @Test
+    void scanRunningTotal(){
+        Observable<Integer> progress = Observable.just(10, 14, 12, 13, 14, 16);
+        Observable<Integer> totalProgress = progress.scan(Integer::sum);
+
+        totalProgress.subscribe(System.out::println);
+    }
+
+    @Test
+    void scanFactorials(){
+
+        Observable.range(2,100).scan(BigInteger.ONE, (big,cur)->
+        big.multiply(BigInteger.valueOf(cur))).subscribe(System.out::println);
+
+
+    }
+
+    @Test
+    void reduceRunningTotal(){
+        Observable<Integer> progress = Observable.just(10, 14, 12, 13, 14, 16);
+        Observable<Integer> totalProgress = progress.reduce(Integer::sum);
+
+        totalProgress.subscribe(System.out::println);
+    }
+
+    @Test
+    void reduceWithMutableAccumulator(){
+        Observable.range(10, 20).reduce(new ArrayList<>(), (list, item)->{
+            list.add(item);
+            return list;
+        }).subscribe(System.out::println);
+    }
+
+    @Test
+    void collectWithMutableAccumulator(){
+        Observable.range(10, 20).collect(ArrayList::new, List::add).subscribe(System.out::println);
+    }
+
+    @Test
+    void collectWithStringBuilder(){
+        Observable.range(10, 20).collect(StringBuilder::new, (sb,x)->
+                sb.append(x).append(","))
+                .subscribe(System.out::println);
+    }
+
+    @Test
+    void randomUsingWhile(){
+        randomInts().take(1000).subscribe(System.out::println);
+    }
+
+    @Test
+    void randomTake10(){
+        randomInts().take(10).subscribe(System.out::println);
+    }
+
+    @Test
+    void randomDistinctTake10(){
+        randomInts().distinct().take(10).subscribe(System.out::println);
+    }
+
+    @Test
+    void takeExample(){
+        Observable.range(1,5).take(3).subscribe(System.out::println); //1,2,3
+    }
+
+    @Test
+    void takeLastExample(){
+        Observable.range(1,5).takeLast(3).subscribe(System.out::println); //3,4,5
+    }
+
+    @Test
+    void takeUntilExample(){
+        Observable.range(1,5).takeUntil(x->x==3).subscribe(System.out::println); //1,2,3
+    }
+
+    @Test
+    void takeWhileExample(){
+        Observable.range(1,5).takeWhile(x->x!=3).subscribe(System.out::println); //1,2,3
+    }
+
+    @Test
+    void skipExample(){
+        Observable.range(1,5).skip(3).subscribe(System.out::println); //4,5
+    }
+
+    @Test
+    void skipLastExample(){
+        Observable.range(1,5).skipLast(3).subscribe(System.out::println); //1,2
+    }
+
+    @Test
+    void skipAllExample(){
+        Observable.range(1,5).skip(5).subscribe(System.out::println);
+    }
+
+
+    @Test
+    void implementCountWithReduce(){
+        Observable.just('A', 'B','C', 'D').reduce(0, (sizeSoFar, ch)-> sizeSoFar+1).subscribe(System.out::println);
+    }
+
+
+    @Test
+    void allMatch(){
+        Observable.range(1,5).all(x-> x!= 4).subscribe(System.out::println); //false
+    }
+
+    @Test
+    void existsMatch(){
+        Observable.range(1,5).exists(x-> x== 4).subscribe(System.out::println); //true
+    }
+
+    @Test
+    void containsMatch(){
+        Observable.range(1,5).contains(4).subscribe(System.out::println); //true
+    }
+
+
 
 }
