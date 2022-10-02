@@ -45,6 +45,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jeasy/easy-random-randomizers
     implementation 'org.jeasy:easy-random-randomizers:5.0.0'
 
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    implementation 'com.h2database:h2:2.1.214'
+
 
 }
 
