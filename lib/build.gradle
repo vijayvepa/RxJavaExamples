@@ -19,7 +19,15 @@ repositories {
 dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     // https://mvnrepository.com/artifact/io.netty/netty-all
-    implementation 'io.netty:netty-all:4.1.82.Final'
+    implementation 'io.netty:netty-all:4.1.5.Final'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    implementation 'org.slf4j:slf4j-simple:2.0.3'
+
+
+    implementation 'io.reactivex:rxnetty-tcp:0.5.3'
+    implementation 'io.reactivex:rxnetty-http:0.5.3'
+    implementation 'io.reactivex:rxnetty-common:0.5.3'
+    //implementation 'io.reactivex:rxnetty-http:0.5.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     api 'org.apache.commons:commons-math3:3.6.1'

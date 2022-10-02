@@ -20,6 +20,8 @@ dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'io.netty:netty:3.10.6.Final'
     implementation 'io.netty:netty-bom:4.1.82.Final'
+    implementation 'io.reactivex:rxnetty:0.5.1'
+    implementation 'io.reactivex:rxnetty-tcp:0.5.3'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     api 'org.apache.commons:commons-math3:3.6.1'
 
