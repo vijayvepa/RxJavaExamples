@@ -5,3 +5,9 @@ allprojects {
         mavenCentral()
     }
 }
+
+dependencies {
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'io.netty:netty:3.10.6.Final'
+    implementation 'io.netty:netty-bom:4.1.82.Final'
+}

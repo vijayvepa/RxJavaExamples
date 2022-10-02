@@ -17,6 +17,10 @@ repositories {
 }
 
 dependencies {
+    implementation 'commons-io:commons-io:2.11.0'
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    implementation 'io.netty:netty-all:4.1.82.Final'
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     api 'org.apache.commons:commons-math3:3.6.1'
 
