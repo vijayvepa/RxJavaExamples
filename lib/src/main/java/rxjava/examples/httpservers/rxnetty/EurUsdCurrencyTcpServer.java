@@ -1,4 +1,4 @@
-package rxjava.examples.httpservers.netty;
+package rxjava.examples.httpservers.rxnetty;
 
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
