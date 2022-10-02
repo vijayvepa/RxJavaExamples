@@ -11,6 +11,8 @@ public class HttpInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel ch) {
-        ch.pipeline().addLast(new HttpServerCodec()).addLast(httpHandler);
+        ch.pipeline()
+                .addLast(new HttpServerCodec())
+                .addLast(httpHandler);
     }
 }

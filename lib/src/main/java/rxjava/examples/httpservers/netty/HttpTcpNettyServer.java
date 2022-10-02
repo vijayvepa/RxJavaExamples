@@ -6,6 +6,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+import static rxjava.examples.Log.log;
+
 public class HttpTcpNettyServer {
     public static void main(String[] args) {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
@@ -23,6 +25,8 @@ public class HttpTcpNettyServer {
                     .channel()
                     .closeFuture()
                     .sync();
+
+            log("Started Netty on port 8080");
 
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

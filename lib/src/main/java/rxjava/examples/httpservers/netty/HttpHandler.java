@@ -4,10 +4,10 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 
-import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 
 import static rxjava.examples.Log.log;
@@ -41,6 +41,8 @@ public class HttpHandler extends ChannelInboundHandlerAdapter {
         );
 
         res.headers().add("Content-Length", 2);
-        ctx.writeAndFlush(res);
+
+        ctx
+                .writeAndFlush(res);
     }
 }
