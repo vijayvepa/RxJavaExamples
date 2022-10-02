@@ -6,8 +6,10 @@ import rx.Scheduler;
 import rx.schedulers.Schedulers;
 import rxjava.examples.samples.ExistingApplications;
 
-import static rxjava.examples.samples.ExistingApplications.setupWorker;
-import static rxjava.examples.samples.ExistingApplications.simple;
+import java.util.concurrent.TimeUnit;
+
+import static rxjava.examples.Log.log;
+import static rxjava.examples.samples.ExistingApplications.*;
 
 public class ExistingApplicationsTests {
 
@@ -99,6 +101,90 @@ public class ExistingApplicationsTests {
                         () -> Log.threadLog("Completed"));
 
         Log.threadLog("Exiting");
+    }
+
+    @Test
+    void observeOnTest() {
+        log("Starting");
+        final Observable<String> obs = simple();
+        log("Created");
+
+        obs.doOnNext(x -> log("Found 1:" + x))
+                .observeOn(ExistingApplications.SCHEDULER_A)
+                .doOnNext(x -> log("Found 2:" + x))
+                .subscribe(
+                        x -> log("Got 1:" + x),
+                        Throwable::printStackTrace,
+                        () -> log("Completed"));
+    }
+
+    @Test
+    void observeOnTest2() {
+        log("Starting");
+        final Observable<String> obs = simple();
+        log("Created");
+
+        obs.doOnNext(x -> log("Found 1:" + x))
+                .observeOn(ExistingApplications.SCHEDULER_B)
+                .doOnNext(x -> log("Found 2:" + x))
+                .observeOn(ExistingApplications.SCHEDULER_C)
+                .doOnNext(x -> log("Found 3:" + x))
+                .subscribeOn(SCHEDULER_A)
+                .subscribe(
+                        x -> log("Got 1:" + x),
+                        Throwable::printStackTrace,
+                        () -> log("Completed"));
+
+        log("Exiting");
+    }
+
+    @Test
+    void observeOnTest3() {
+        log("Starting");
+
+        final Observable<Object> obs = Observable.create(subscriber -> {
+            log("Subscribed");
+            subscriber.onNext("A");
+            subscriber.onNext("B");
+            subscriber.onNext("C");
+            subscriber.onNext("D");
+            subscriber.onCompleted();
+        });
+
+
+        log("Created");
+
+        obs.
+                subscribeOn(SCHEDULER_A)
+                .flatMap(record -> ExistingApplications.store(record).subscribeOn(SCHEDULER_B))
+                .observeOn(SCHEDULER_C)
+                .toBlocking()
+                .subscribe(
+                        x -> log("Got:" + x),
+                        Throwable::printStackTrace,
+                        () -> log("Completed"));
+
+        log("Exiting");
+    }
+
+    @Test
+    void customDelayThreadTest() {
+        Observable.just("A", "B")
+                .delay(1, TimeUnit.SECONDS, SCHEDULER_A)
+                .doOnNext(x -> log("Delay for " + x))
+                .toBlocking()
+                .subscribe(Log::log);
+
+    }
+
+    @Test
+    void defaultDelayThreadTest() {
+        Observable.just("A", "B")
+                .delay(1, TimeUnit.SECONDS)
+                .doOnNext(x -> log("Delay for " + x))
+                .toBlocking()
+                .subscribe(Log::log);
+
     }
 
 

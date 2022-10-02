@@ -6,6 +6,7 @@ import rx.Scheduler;
 import rx.schedulers.Schedulers;
 import rxjava.examples.Log;
 
+import java.util.UUID;
 import java.util.concurrent.Executors;
 
 public class ExistingApplications {
@@ -30,6 +31,17 @@ public class ExistingApplications {
                     s.onCompleted();
                 }
         );
+    }
+
+    public static Observable<Object> store(Object record) {
+        return Observable.create(subscriber -> {
+            Log.log("Storing record: " + record);
+            sleepOneSecond();
+            Log.log("Storing successful");
+            subscriber.onNext(UUID.randomUUID());
+            subscriber.onCompleted();
+        });
+
     }
 
     public static void setupWorker(Scheduler scheduler) {

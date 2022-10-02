@@ -11,7 +11,8 @@ public class GroceriesRxBL {
         groceriesBL = new GroceriesBL();
     }
 
-    Observable<BigDecimal> purchase(String productName, int quantity) {
-        return Observable.fromCallable(() -> groceriesBL.doPurchase(productName, quantity));
+    public Observable<BigDecimal> purchase(String productName, int quantity) {
+        return Observable.fromCallable(() ->
+                groceriesBL.doPurchase(productName, quantity));
     }
 }
