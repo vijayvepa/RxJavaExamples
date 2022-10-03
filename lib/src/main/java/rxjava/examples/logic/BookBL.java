@@ -1,10 +1,10 @@
 package rxjava.examples.logic;
 
 import rx.Observable;
-import rxjava.examples.ObservableUtils;
 import rxjava.examples.model.Book;
 import rxjava.examples.model.CannotRecommendBookException;
 import rxjava.examples.model.Person;
+import rxjava.examples.utils.ObservableUtils;
 
 import java.util.Random;
 

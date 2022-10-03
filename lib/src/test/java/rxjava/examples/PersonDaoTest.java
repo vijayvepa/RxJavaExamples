@@ -4,6 +4,7 @@ package rxjava.examples;
 import org.junit.jupiter.api.Test;
 import rxjava.examples.dataaccess.PersonDao;
 import rxjava.examples.model.Person;
+import rxjava.examples.utils.ObservableUtils;
 
 import java.util.List;
 

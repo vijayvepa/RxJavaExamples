@@ -1,8 +1,8 @@
 package rxjava.examples.completablefuture;
 
 import rx.Observable;
-import rxjava.examples.ObservableUtils;
 import rxjava.examples.model.User;
+import rxjava.examples.utils.ObservableUtils;
 
 import java.util.concurrent.CompletableFuture;
 

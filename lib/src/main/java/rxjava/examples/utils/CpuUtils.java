@@ -1,4 +1,4 @@
-package rxjava.examples;
+package rxjava.examples.utils;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;

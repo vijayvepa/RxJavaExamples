@@ -1,4 +1,4 @@
-package rxjava.examples;
+package rxjava.examples.utils;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -12,7 +12,7 @@ public class ObservableUtils {
         return observable.toList().toBlocking().single();
     }
 
-    static <T> T toObject(Observable<T> observable) {
+    public static <T> T toObject(Observable<T> observable) {
         return observable.toList().toBlocking().single().stream().findFirst().orElse(null);
     }
 

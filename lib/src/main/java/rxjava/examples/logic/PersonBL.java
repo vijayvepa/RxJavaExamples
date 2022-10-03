@@ -1,9 +1,9 @@
 package rxjava.examples.logic;
 
-import rxjava.examples.ObservableUtils;
 import rxjava.examples.dataaccess.PersonDao;
 import rxjava.examples.model.Person;
 import rxjava.examples.model.PersonDetails;
+import rxjava.examples.utils.ObservableUtils;
 
 import java.util.List;
 import java.util.Random;

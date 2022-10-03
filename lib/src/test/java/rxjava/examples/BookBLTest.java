@@ -5,6 +5,7 @@ import rx.Observable;
 import rxjava.examples.logic.BookBL;
 import rxjava.examples.model.Book;
 import rxjava.examples.model.Person;
+import rxjava.examples.utils.ObservableUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,9 @@
 package rxjava.examples.completablefuture;
 
 import rx.Observable;
-import rxjava.examples.ObservableUtils;
 import rxjava.examples.model.Flight;
 import rxjava.examples.model.Ticket;
+import rxjava.examples.utils.ObservableUtils;
 
 import java.util.concurrent.CompletableFuture;
 

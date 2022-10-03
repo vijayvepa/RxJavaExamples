@@ -3,6 +3,7 @@ package rxjava.examples;
 import org.junit.jupiter.api.Test;
 import rxjava.examples.logic.ReservationRxBL;
 import rxjava.examples.model.Email;
+import rxjava.examples.utils.ObservableUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
