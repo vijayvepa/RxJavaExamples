@@ -1,5 +1,7 @@
 package rxjava.examples.completablefuture;
 
+import rx.Observable;
+import rxjava.examples.ObservableUtils;
 import rxjava.examples.model.Flight;
 import rxjava.examples.model.Ticket;
 
@@ -12,5 +14,9 @@ public class FlightBL {
 
     CompletableFuture<Ticket> bookAsync(Flight flight) {
         return CompletableFuture.supplyAsync(() -> book(flight));
+    }
+
+    Observable<Ticket> bookReactive(Flight flight) {
+        return ObservableUtils.fromCompletableFuture(bookAsync(flight));
     }
 }

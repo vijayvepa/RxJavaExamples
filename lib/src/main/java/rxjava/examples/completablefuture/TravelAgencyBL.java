@@ -1,5 +1,7 @@
 package rxjava.examples.completablefuture;
 
+import org.apache.commons.lang3.tuple.Pair;
+import rx.Observable;
 import rxjava.examples.model.Flight;
 import rxjava.examples.model.Geolocation;
 import rxjava.examples.model.Ticket;
@@ -26,6 +28,7 @@ public class TravelAgencyBL {
         this.flightBL = flightBL;
     }
 
+    //region thread pool
     Ticket bookFastest(List<TravelAgency> travelAgencies) throws InterruptedException, ExecutionException {
         ExecutorService pool = Executors.newFixedThreadPool(10);
 
@@ -45,7 +48,10 @@ public class TravelAgencyBL {
 
     }
 
-    CompletableFuture<Ticket> bookFastestAsync(List<TravelAgency> travelAgencies) throws InterruptedException, ExecutionException {
+    //endregion
+
+    //region completable future
+    CompletableFuture<Ticket> bookFastestAsync(List<TravelAgency> travelAgencies) {
 
 
         String id = UUID.randomUUID().toString();
@@ -68,7 +74,7 @@ public class TravelAgencyBL {
 
     }
 
-    CompletableFuture<Ticket> bookFastestAsyncWithAnyOf(List<TravelAgency> travelAgencies) throws InterruptedException, ExecutionException {
+    CompletableFuture<Ticket> bookFastestAsyncWithAnyOf(List<TravelAgency> travelAgencies) {
 
 
         String id = UUID.randomUUID().toString();
@@ -79,17 +85,17 @@ public class TravelAgencyBL {
 
 
         return user.thenCombine(location,
-                        (u, l) -> getFlightCompletableFuture(travelAgencies, u, l))
+                        (u, l) -> getAnyFlightCompletableFuture(travelAgencies, u, l))
                 .thenCompose(Function.identity())
                 .thenCompose(flightBL::bookAsync);
 
 
     }
 
-    private static CompletableFuture<Flight> getFlightCompletableFuture(List<TravelAgency> travelAgencies, User u, Geolocation l) {
+    private static CompletableFuture<Flight> getAnyFlightCompletableFuture(List<TravelAgency> travelAgencies, User u, Geolocation l) {
 
         final List<CompletableFuture<Flight>> flightFutures = travelAgencies.stream().map(travelAgency -> travelAgency.searchAsync(u, l)).collect(Collectors.toList());
-        CompletableFuture<Flight>[] futuresArray = new CompletableFuture<>[flightFutures.size()];
+        CompletableFuture<?>[] futuresArray = new CompletableFuture<?>[flightFutures.size()];
         flightFutures.toArray(futuresArray);
 
         return CompletableFuture.anyOf(futuresArray).thenApply(x -> ((Flight) x));
@@ -104,4 +110,41 @@ public class TravelAgencyBL {
 
         return instantCompletableFuture.thenCombine(zoneIdCompletableFuture, ZonedDateTime::ofInstant);
     }
+    //endregion
+
+    //observable
+
+    public Observable<Ticket> bookFastestReactive(List<TravelAgency> travelAgencies) {
+        String id = UUID.randomUUID().toString();
+        final Observable<User> user = userBL.findByIdReactive(id);
+        final Observable<Geolocation> location = geolocationBL.locateReactive();
+        final Observable<TravelAgency> agencies = Observable.from(travelAgencies);
+
+        return user.zipWith(location, (u, l) ->
+                        agencies
+                                .flatMap(a -> a.searchObservable(u, l))
+                                .first()
+                )
+                .flatMap(x -> x)
+                .flatMap(flightBL::bookReactive);
+    }
+
+    public Observable<Ticket> bookFastestReactiveAlt(List<TravelAgency> travelAgencies) {
+        String id = UUID.randomUUID().toString();
+        final Observable<User> user = userBL.findByIdReactive(id);
+        final Observable<Geolocation> location = geolocationBL.locateReactive();
+        final Observable<TravelAgency> agencies = Observable.from(travelAgencies);
+
+        return user
+                .zipWith(location, Pair::of)
+                .flatMap(pair ->
+                        agencies.flatMap(agency ->
+                                agency.searchObservable(pair.getLeft(), pair.getRight()))
+                )
+                .first()
+                .flatMap(flightBL::bookReactive);
+    }
+
+    //endregion
+
 }
