@@ -48,6 +48,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.h2database/h2
     implementation 'com.h2database:h2:2.1.214'
 
+    // https://mvnrepository.com/artifact/com.github.alaisi.pgasync/postgres-async-driver
+    implementation 'com.github.alaisi.pgasync:postgres-async-driver:0.9'
+
 
 }
 
