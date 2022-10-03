@@ -32,14 +32,23 @@ public class ObservableUtils {
                 }
 
                 //don't do this
-                //unsubscribe(subscriber, completableFuture);
+                ///unsubscribe(subscriber, completableFuture);
 
             });
         });
     }
 
+    /**
+     * Unsubscribe
+     *
+     * @param subscriber subscriber
+     * @param future     future
+     * @param <T>        type  of observable
+     * @deprecated DO NOT USE if just one subscriber decided to cancel, it will affect all subscribers
+     */
+    @Deprecated
     private static <T> void unsubscribe(Subscriber<? super T> subscriber, CompletableFuture<T> future) {
-        //if just one subscriber decided to cancel, it will affect all subscribers
+
         subscriber.add(Subscriptions.create(() -> future.cancel(true)));
     }
 

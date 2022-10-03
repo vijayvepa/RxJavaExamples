@@ -51,6 +51,11 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.alaisi.pgasync/postgres-async-driver
     implementation 'com.github.alaisi.pgasync:postgres-async-driver:0.9'
 
+    implementation 'com.ning:async-http-client:1.9.40'
+
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-jdbc
+    implementation 'org.springframework.data:spring-data-jdbc:2.4.3'
+
 
 }
 
