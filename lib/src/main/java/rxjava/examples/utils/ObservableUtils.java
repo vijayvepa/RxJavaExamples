@@ -43,4 +43,20 @@ public class ObservableUtils {
         subscriber.add(Subscriptions.create(() -> future.cancel(true)));
     }
 
+
+    public static <T> CompletableFuture<T> toFuture(Observable<T> observable) {
+        CompletableFuture<T> completableFuture = new CompletableFuture<>();
+
+        observable
+                .single()
+                .subscribe(
+                        completableFuture::complete,
+                        completableFuture::completeExceptionally
+                );
+        return completableFuture;
+    }
+
+    public static <T> CompletableFuture<List<T>> toFutureList(Observable<T> observable) {
+        return toFuture(observable.toList());
+    }
 }
