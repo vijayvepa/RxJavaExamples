@@ -6,6 +6,7 @@ import rx.subscriptions.Subscriptions;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class ObservableUtils {
     public static <T> List<T> toList(Observable<T> observable) {
@@ -67,5 +68,9 @@ public class ObservableUtils {
 
     public static <T> CompletableFuture<List<T>> toFutureList(Observable<T> observable) {
         return toFuture(observable.toList());
+    }
+
+    public static <T> Observable<T> delayedCompletion() {
+        return Observable.<T>empty().delay(1, TimeUnit.SECONDS);
     }
 }
