@@ -73,4 +73,11 @@ public class ObservableUtils {
     public static <T> Observable<T> delayedCompletion() {
         return Observable.<T>empty().delay(1, TimeUnit.SECONDS);
     }
+
+    public static <T> Observable<T> delayedEmit(Observable<T> names, Observable<Long> delayMillis) {
+        return names.zipWith(delayMillis, (n, d) ->
+                Observable.just(n)
+                        .delay(d, TimeUnit.MILLISECONDS)
+        ).flatMap(o -> o);
+    }
 }
