@@ -32,7 +32,9 @@ public class SingleTests {
 
     @Test
     void asyncHttpClientCallableTest() {
-        final Single<String> responseBody = singleExamples.fetch("https://www.google.com").flatMap(singleExamples::bodyCallable);
+        final Single<String> responseBody = singleExamples
+                .fetch("https://www.google.com")
+                .flatMap(singleExamples::bodyCallable);
 
         final String body = responseBody.toBlocking().value();
         System.out.println(body);
