@@ -1,6 +1,7 @@
 package rxjava.examples;
 
 import org.junit.jupiter.api.Test;
+import rxjava.examples.flowcontrol.ComplexConsumer;
 import rxjava.examples.flowcontrol.Consumer;
 import rxjava.examples.flowcontrol.Producer;
 import rxjava.examples.utils.ObservableUtils;
@@ -9,6 +10,8 @@ public class FlowControlTests {
 
     Producer producer = new Producer();
     Consumer consumer = new Consumer();
+
+    ComplexConsumer complexConsumer = new ComplexConsumer("Europe/Warsaw");
 
     @Test
     void sampling() {
@@ -116,5 +119,18 @@ public class FlowControlTests {
         );
     }
 
+    @Test
+    void complexBufferingTest() {
+        complexConsumer.complexBuffering(
+                producer.teleData()
+        );
+    }
+
+    @Test
+    void complexBufferingNonBusinessHoursTest() {
+        new ComplexConsumer("Asia/Shanghai").complexBuffering(
+                producer.teleData()
+        );
+    }
 
 }

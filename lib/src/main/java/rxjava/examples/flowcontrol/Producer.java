@@ -2,6 +2,7 @@ package rxjava.examples.flowcontrol;
 
 import rx.Observable;
 import rx.schedulers.Timestamped;
+import rxjava.examples.model.TeleData;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -42,5 +43,9 @@ public class Producer {
 
     public Observable<Double> randomGaussian() {
         return Observable.defer(() -> Observable.just(random.nextGaussian())).repeat(1000);
+    }
+
+    public Observable<TeleData> teleData() {
+        return Observable.interval(10, TimeUnit.MILLISECONDS).map(x -> TeleData.builder().timestamp(x).value(random.nextGaussian()).build());
     }
 }
