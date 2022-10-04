@@ -4,6 +4,7 @@ import rx.Observable;
 import rx.schedulers.Timestamped;
 import rxjava.examples.Log;
 import rxjava.examples.model.Book;
+import rxjava.examples.model.TeleData;
 import rxjava.examples.utils.ObservableUtils;
 
 import java.util.List;
@@ -85,5 +86,11 @@ public class Consumer {
 
     public void bufferWithTimePeriod(Observable<String> observable) {
         observable.buffer(1, TimeUnit.SECONDS).toBlocking().subscribe(System.out::println);
+    }
+
+
+    public void windowBuffering(Observable<TeleData> observable) {
+        final Observable<Observable<TeleData>> window = observable.window(1, TimeUnit.SECONDS);
+        window.flatMap(Observable::count).toBlocking().subscribe(Log::log);
     }
 }

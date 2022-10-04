@@ -57,4 +57,5 @@ public class ComplexConsumer {
     public void complexBuffering(Observable<TeleData> observable) {
         observable.buffer(bufferedOpenings()).map(List::size).toBlocking().subscribe(Log::log);
     }
+
 }

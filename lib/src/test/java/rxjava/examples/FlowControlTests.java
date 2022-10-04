@@ -133,4 +133,11 @@ public class FlowControlTests {
         );
     }
 
+    @Test
+    void windowBufferingTest() {
+        consumer.windowBuffering(
+                producer.teleData()
+        );
+    }
+
 }
