@@ -1,9 +1,11 @@
 package rxjava.examples.flowcontrol;
 
 import rx.Observable;
+import rx.observables.ConnectableObservable;
 import rx.schedulers.Timestamped;
 import rxjava.examples.model.TeleData;
 
+import java.math.BigDecimal;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -33,8 +35,25 @@ public class Producer {
                 .map(d -> (long) (d * 1_000));
     }
 
+    public Observable<BigDecimal> prices() {
+        return Observable.just(
+                125, 130, 140,
+                125,
+
+                130, 140, 150, 155,
+                160, 165).map(BigDecimal::new);
+    }
+
     public Observable<Timestamped<Long>> observableAt10msFrequency() {
         return Observable.interval(10, TimeUnit.MILLISECONDS).timestamp();
+    }
+
+    public Observable<Long> intervalObservable(int millis) {
+        return Observable.interval(millis, TimeUnit.MILLISECONDS);
+    }
+
+    public ConnectableObservable<Long> connectableInterval(int millis) {
+        return Observable.interval(millis, TimeUnit.MILLISECONDS).publish();
     }
 
     public Observable<Integer> ranged() {

@@ -1,12 +1,14 @@
 package rxjava.examples.flowcontrol;
 
 import rx.Observable;
+import rx.observables.ConnectableObservable;
 import rx.schedulers.Timestamped;
 import rxjava.examples.Log;
 import rxjava.examples.model.Book;
 import rxjava.examples.model.TeleData;
 import rxjava.examples.utils.ObservableUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -92,5 +94,56 @@ public class Consumer {
     public void windowBuffering(Observable<TeleData> observable) {
         final Observable<Observable<TeleData>> window = observable.window(1, TimeUnit.SECONDS);
         window.flatMap(Observable::count).toBlocking().subscribe(Log::log);
+    }
+
+    public <T> void debounce(Observable<T> observable) {
+        observable.debounce(500, TimeUnit.MILLISECONDS).toBlocking().subscribe(Log::log);
+    }
+
+    public void conditionalDebounce(Observable<BigDecimal> observable) {
+        observable.debounce(x -> {
+            boolean goodPrice = x.compareTo(BigDecimal.valueOf(150)) > 0;
+            return Observable.empty().delay(goodPrice ? 10 : 100, TimeUnit.MILLISECONDS);
+        }).toBlocking().subscribe(Log::log);
+    }
+
+    public void starvingDebounce(int debounceMs, Observable<Long> fasterObservable) {
+        fasterObservable.debounce(debounceMs, TimeUnit.MILLISECONDS).toBlocking().subscribe(Log::log);
+    }
+
+    public void starvingDebounceWithTimeout(int debounceMs, Observable<Long> fasterObservable) {
+        fasterObservable.debounce(debounceMs, TimeUnit.MILLISECONDS)
+                .timeout(1, TimeUnit.SECONDS)
+                .toBlocking().subscribe(Log::log, Throwable::printStackTrace);
+    }
+
+    public void starvingDebounceWithRecoveryBad1(int debounceMs, ConnectableObservable<Long> fasterObservable) {
+        fasterObservable.debounce(debounceMs, TimeUnit.MILLISECONDS)
+                .timeout(1, TimeUnit.SECONDS, fasterObservable.take(1))
+                .toBlocking().subscribe(Log::log, Throwable::printStackTrace);
+        ;
+
+
+        fasterObservable.connect();
+    }
+
+    public void starvingDebounceWithRecoveryBad2(int debounceMs, ConnectableObservable<Long> fasterObservable) {
+        fasterObservable.debounce(debounceMs, TimeUnit.MILLISECONDS)
+                .timeout(1, TimeUnit.SECONDS,
+                        fasterObservable.take(1).concatWith(fasterObservable.debounce(debounceMs, TimeUnit.MILLISECONDS))
+                )
+
+                .toBlocking().subscribe(Log::log, Throwable::printStackTrace);
+        ;
+
+
+        fasterObservable.connect();
+    }
+
+    public Observable<Long> timedDebounce(int debounceMs, Observable<Long> fastObservable) {
+        Observable<Long> onTimeout = fastObservable.take(1).concatWith(Observable.defer(() -> timedDebounce(debounceMs, fastObservable)));
+
+        return fastObservable.debounce(debounceMs, TimeUnit.MILLISECONDS).timeout(1, TimeUnit.SECONDS, onTimeout);
+
     }
 }

@@ -4,14 +4,15 @@ import org.junit.jupiter.api.Test;
 import rxjava.examples.flowcontrol.ComplexConsumer;
 import rxjava.examples.flowcontrol.Consumer;
 import rxjava.examples.flowcontrol.Producer;
+import rxjava.examples.flowcontrol.TradingProducer;
 import rxjava.examples.utils.ObservableUtils;
 
 public class FlowControlTests {
 
     Producer producer = new Producer();
     Consumer consumer = new Consumer();
-
     ComplexConsumer complexConsumer = new ComplexConsumer("Europe/Warsaw");
+    TradingProducer tradingProducer = new TradingProducer();
 
     @Test
     void sampling() {
@@ -140,4 +141,73 @@ public class FlowControlTests {
         );
     }
 
+    @Test
+    void debounceNamesTest() {
+
+        consumer.debounce(
+                ObservableUtils.delayedEmit(producer.names(), producer.delayMillis())
+        );
+    }
+
+    @Test
+    void debouncePricesTest() {
+
+        consumer.debounce(
+                ObservableUtils.delayedEmit(producer.prices(), producer.delayMillis())
+        );
+    }
+
+    @Test
+    void debounceConditionalTest() {
+
+        consumer.conditionalDebounce(
+                ObservableUtils.delayedEmit(producer.prices(), producer.delayMillis())
+        );
+    }
+
+    @Test
+    void tradingDebounceTest() {
+
+        consumer.conditionalDebounce(
+                tradingProducer.pricesOf("NFLX")
+        );
+    }
+
+    @Test
+    void starvingDebounceTest() {
+        consumer.starvingDebounce(100,
+                producer.intervalObservable(93)
+        );
+    }
+
+    @Test
+    void starvingDebounceWithTimeoutTest() {
+        consumer.starvingDebounceWithTimeout(100,
+                producer.intervalObservable(95)
+        );
+    }
+
+    @Test
+    void starvingDebounceWithRecoveryTest() {
+        consumer.starvingDebounceWithRecoveryBad1(100,
+                producer.connectableInterval(93)
+        );
+
+    }
+
+    @Test
+    void starvingDebounceWithRecoveryBadTest2() {
+        consumer.starvingDebounceWithRecoveryBad2(100,
+                producer.connectableInterval(93)
+        );
+
+    }
+
+    @Test
+    void timedDebounceTest() {
+        consumer.timedDebounce(100,
+                producer.intervalObservable(93)
+        ).toBlocking().subscribe(Log::log);
+
+    }
 }
