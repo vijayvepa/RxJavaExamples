@@ -3,7 +3,9 @@ package rxjava.examples.flowcontrol;
 import rx.Observable;
 import rx.internal.operators.OnSubscribeRange;
 import rx.observables.ConnectableObservable;
+import rx.observables.SyncOnSubscribe;
 import rx.schedulers.Timestamped;
+import rxjava.examples.Log;
 import rxjava.examples.model.Dish;
 import rxjava.examples.model.TeleData;
 
@@ -100,5 +102,33 @@ public class Producer {
 
     public Observable<Integer> myRangeWithBackpressure(int from, int count) {
         return Observable.unsafeCreate(new OnSubscribeRange(from, count));
+    }
+
+    public Observable<Double> randomWithBackpressureEnabled() {
+        Observable.OnSubscribe<Double> onSubscribe = SyncOnSubscribe.createStateless(
+                observer -> observer.onNext(Math.random())
+        );
+        return Observable.unsafeCreate(onSubscribe);
+    }
+
+    public Observable<Long> naturalNumbers() {
+        Observable.OnSubscribe<Long> onSubscribe = SyncOnSubscribe.createStateful(
+                () -> 0L,
+                (cur, observer) -> {
+                    observer.onNext(cur);
+                    return cur + 1;
+                }
+        );
+        return Observable.unsafeCreate(onSubscribe);
+    }
+
+    public Observable<Long> naturalNumbersNoBackpressureSupport() {
+        return Observable.unsafeCreate(subscriber -> {
+            long cur = 0;
+            while ((!subscriber.isUnsubscribed())) {
+                Log.log("Produced : " + cur);
+                subscriber.onNext(cur++);
+            }
+        });
     }
 }

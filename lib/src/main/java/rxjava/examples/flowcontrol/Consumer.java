@@ -3,6 +3,7 @@ package rxjava.examples.flowcontrol;
 import rx.Observable;
 import rx.Subscriber;
 import rx.observables.ConnectableObservable;
+import rx.observables.SyncOnSubscribe;
 import rx.schedulers.Schedulers;
 import rx.schedulers.Timestamped;
 import rxjava.examples.Log;
@@ -227,5 +228,34 @@ public class Consumer {
                     Log.log("Washing " + x);
                     sleepMillis(50);
                 }, Throwable::printStackTrace);
+    }
+
+    public <T> void storeWithSubscribe(Observable<T> source) {
+        source.subscribe(this::store);
+    }
+
+    public void storeWithFlatMap(Observable<Double> source) {
+        source.flatMap(this::storeObs).subscribe(uud -> Log.log("Stored: " + uud));
+    }
+
+    public void storeWithFlatMapBuffered(Observable<Double> source) {
+        source.flatMap(this::storeObs).buffer(100).subscribe(uud -> Log.log("Stored: " + uud));
+    }
+
+    private Observable<String> storeObs(Double aDouble) {
+        Observable.OnSubscribe<String> subscribe = SyncOnSubscribe.createStateless(
+                observer -> {
+                    store(aDouble);
+                    observer.onNext(aDouble.toString());
+                }
+
+        );
+        return Observable.unsafeCreate(subscribe);
+    }
+
+
+    private <T> void store(T t) {
+        sleepMillis(100);
+        Log.log("Stored " + t);
     }
 }
