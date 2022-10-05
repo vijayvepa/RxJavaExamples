@@ -1,10 +1,13 @@
 package rxjava.examples.flowcontrol;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.observables.ConnectableObservable;
+import rx.schedulers.Schedulers;
 import rx.schedulers.Timestamped;
 import rxjava.examples.Log;
 import rxjava.examples.model.Book;
+import rxjava.examples.model.Dish;
 import rxjava.examples.model.TeleData;
 import rxjava.examples.utils.ObservableUtils;
 
@@ -145,5 +148,84 @@ public class Consumer {
 
         return fastObservable.debounce(debounceMs, TimeUnit.MILLISECONDS).timeout(1, TimeUnit.SECONDS, onTimeout);
 
+    }
+
+    public void waitAndWash(Observable<Dish> dishes) {
+        dishes.subscribe(x -> {
+            System.out.println("Washing: " + x);
+            sleepMillis(50);
+        });
+    }
+
+    public void washIndependently(Observable<Dish> dishes) {
+        dishes
+                .observeOn(Schedulers.io())
+                .toBlocking()
+                .subscribe(x -> {
+                    System.out.println("Washing: " + x);
+                    sleepMillis(50);
+                });
+    }
+
+    private void sleepMillis(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void requestExample(int requestSize, Observable<Integer> observable) {
+        observable.subscribe(new Subscriber<Integer>() {
+            @Override
+            public void onCompleted() {
+                Log.log("Completed");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+                request(requestSize);
+                Log.log("Next : " + integer);
+            }
+
+            @Override
+            public void onStart() {
+                request(requestSize);
+            }
+        });
+    }
+
+    public void backPressureExplicitEnabled(Observable<Dish> observable) {
+        observable.onBackpressureBuffer()
+                .observeOn(Schedulers.io())
+                .subscribe(x -> {
+                    Log.log("Washing " + x);
+                    sleepMillis(50);
+                });
+    }
+
+    public void backPressureLimitEnabled(Observable<Dish> observable) {
+        observable
+                .onBackpressureBuffer(1000, () -> Log.log("WARN: Buffer Full"))
+                .observeOn(Schedulers.io())
+                .subscribe(x -> {
+                    Log.log("Washing " + x);
+                    sleepMillis(50);
+                }, Throwable::printStackTrace);
+    }
+
+    public void backPressureDropEnabled(Observable<Dish> observable) {
+        observable
+                .onBackpressureDrop(dish -> Log.log("Throw it away" + dish))
+                .observeOn(Schedulers.io())
+                .subscribe(x -> {
+                    Log.log("Washing " + x);
+                    sleepMillis(50);
+                }, Throwable::printStackTrace);
     }
 }

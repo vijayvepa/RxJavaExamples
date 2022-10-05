@@ -1,8 +1,10 @@
 package rxjava.examples.flowcontrol;
 
 import rx.Observable;
+import rx.internal.operators.OnSubscribeRange;
 import rx.observables.ConnectableObservable;
 import rx.schedulers.Timestamped;
+import rxjava.examples.model.Dish;
 import rxjava.examples.model.TeleData;
 
 import java.math.BigDecimal;
@@ -66,5 +68,37 @@ public class Producer {
 
     public Observable<TeleData> teleData() {
         return Observable.interval(10, TimeUnit.MILLISECONDS).map(x -> TeleData.builder().timestamp(x).value(random.nextGaussian()).build());
+    }
+
+    public Observable<Dish> lotsOfDishesToWash() {
+        return Observable.range(1, 1_000_000_000).map(Dish::new);
+    }
+
+    public Observable<Dish> lotsOfDishesToWashNoBreak() {
+        return rangeWithoutBackpressure(1, 1_000_000_000).map(Dish::new);
+    }
+
+    public Observable<Dish> lotsOfDishesToWashBackpressureEnabled() {
+        return myRangeWithBackpressure(1, 1_000_000_000).map(Dish::new);
+    }
+
+    public Observable<Integer> rangeWithoutBackpressure(int from, int count) {
+        return Observable.unsafeCreate(subscriber -> {
+            int i = from;
+
+            while (i < from + count) {
+                if (!subscriber.isUnsubscribed()) {
+                    subscriber.onNext(i++);
+                } else {
+                    return;
+                }
+            }
+            subscriber.onCompleted();
+        });
+    }
+
+
+    public Observable<Integer> myRangeWithBackpressure(int from, int count) {
+        return Observable.unsafeCreate(new OnSubscribeRange(from, count));
     }
 }
