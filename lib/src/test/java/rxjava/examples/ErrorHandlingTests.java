@@ -1,11 +1,13 @@
 package rxjava.examples;
 
 import org.junit.jupiter.api.Test;
+import rxjava.examples.errorhandling.Retries;
 import rxjava.examples.errorhandling.Timeouts;
 
 public class ErrorHandlingTests {
 
     Timeouts timeouts = new Timeouts();
+    Retries retries = new Retries();
 
     @Test
     void timeoutTest() throws InterruptedException {
@@ -33,5 +35,10 @@ public class ErrorHandlingTests {
     @Test
     void timeoutExampleWithFallback() {
         timeouts.timeoutExampleWithFallback();
+    }
+
+    @Test
+    void retryExample() {
+        retries.retryExample();
     }
 }
