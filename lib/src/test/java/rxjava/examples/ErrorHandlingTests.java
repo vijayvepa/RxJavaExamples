@@ -41,4 +41,29 @@ public class ErrorHandlingTests {
     void retryExample() {
         retries.retryExample();
     }
+
+    @Test
+    void retryWithLimitExample() {
+        retries.retryWithLimitExample();
+    }
+
+    @Test
+    void retryWithLimitAltExample() {
+        retries.retryWithLimitAltExample();
+    }
+
+    @Test
+    void retryWithDropExample() {
+        retries.retryWithDropExample();
+    }
+
+    @Test
+    void retryWithBackoff() {
+        retries.retryWithSimpleBackoffDelay();
+    }
+
+    @Test
+    void retryWithExpBackoff() {
+        retries.retryWithExponentialBackoff(20);
+    }
 }
