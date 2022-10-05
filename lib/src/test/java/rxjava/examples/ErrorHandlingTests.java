@@ -18,4 +18,20 @@ public class ErrorHandlingTests {
         timeouts.timeoutExample(190);
         Thread.sleep(5000);
     }
+
+    @Test
+    void timeoutWithHandshakeTest() throws InterruptedException {
+        timeouts.timeoutExampleWithHandshake();
+        Thread.sleep(5000);
+    }
+
+    @Test
+    void trackLatencyTest() throws InterruptedException {
+        timeouts.trackLatency();
+    }
+
+    @Test
+    void timeoutExampleWithFallback() {
+        timeouts.timeoutExampleWithFallback();
+    }
 }
