@@ -9,6 +9,7 @@ import rx.observables.BlockingObservable;
 import rx.observers.TestSubscriber;
 import rx.schedulers.Schedulers;
 import rx.schedulers.TestScheduler;
+import rxjava.examples.testingsupport.NaturalNumbers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class TestingSupportTests {
+
+    NaturalNumbers naturalNumbers = new NaturalNumbers();
 
     @Test
     void virtualTimeTest() throws InterruptedException {
@@ -107,5 +110,18 @@ public class TestingSupportTests {
         testSubscriber.assertError(CompositeException.class);
     }
 
+
+    @Test
+    void testBackpressureSupport() {
+        TestSubscriber<Long> testSubscriber = new TestSubscriber<>(0);
+
+        naturalNumbers.naturalNumber1().take(10).subscribe(testSubscriber);
+
+        testSubscriber.assertNoValues();
+        testSubscriber.requestMore(100);
+        testSubscriber.assertValueCount(10);
+        testSubscriber.assertCompleted();
+
+    }
 
 }
