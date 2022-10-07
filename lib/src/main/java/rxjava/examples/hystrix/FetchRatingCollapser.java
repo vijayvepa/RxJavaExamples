@@ -1,7 +1,6 @@
 package rxjava.examples.hystrix;
 
 import com.netflix.hystrix.*;
-import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import rx.functions.Func1;
 import rxjava.examples.model.Book;
 import rxjava.examples.model.Rating;
@@ -13,8 +12,6 @@ import java.util.stream.Collectors;
 public class FetchRatingCollapser extends HystrixObservableCollapser<Book, Rating, Rating, Book> {
 
     private final Book book;
-    private final HystrixRequestContext requestContext;
-
     public FetchRatingCollapser(Book book) {
         super(
                 Setter.withCollapserKey(HystrixCollapserKey.Factory.asKey("Books"))
@@ -22,9 +19,10 @@ public class FetchRatingCollapser extends HystrixObservableCollapser<Book, Ratin
                                 HystrixCollapserProperties.Setter()
                                         .withTimerDelayInMilliseconds(20)
                                         .withMaxRequestsInBatch(50))
+                        .andScope(Scope.GLOBAL)
         );
         this.book = book;
-        requestContext = HystrixRequestContext.initializeContext();
+        // requestContext = HystrixRequestContext.initializeContext();
     }
 
     @Override
