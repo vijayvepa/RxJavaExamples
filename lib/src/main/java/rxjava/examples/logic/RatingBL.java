@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 public class RatingBL {
     public Observable<Rating> fetchRating(Book book) {
-        return Observable.just(new Rating()).delay(100, TimeUnit.MILLISECONDS);
+        return Observable.just(new Rating().setBook(book)).delay(100, TimeUnit.MILLISECONDS);
     }
 
     public Observable<Rating> fetchRatings(Collection<Book> books) {
-        final List<Rating> ratings = books.stream().map(x -> new Rating()).collect(Collectors.toList());
+        final List<Rating> ratings = books.stream().map(book -> new Rating().setBook(book)).collect(Collectors.toList());
         return Observable.from(ratings).delay(200, TimeUnit.MILLISECONDS);
     }
 }

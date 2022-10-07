@@ -5,6 +5,7 @@ import rx.Observable;
 import rxjava.examples.hystrix.BlockingCommand;
 import rxjava.examples.hystrix.CitiesCommand;
 import rxjava.examples.hystrix.FetchMyRatings;
+import rxjava.examples.hystrix.FetchRatingCollapser;
 import rxjava.examples.logic.BookBL;
 import rxjava.examples.logic.RatingBL;
 import rxjava.examples.model.Book;
@@ -90,6 +91,16 @@ public class HystrixTests {
         RatingBL ratingBL = new RatingBL();
         final List<Book> single = new BookBL().allBooks().take(5).toList().toBlocking().single();
         new FetchMyRatings(single, ratingBL).observe().toBlocking().subscribe(Log::log);
+
+    }
+
+    @Test
+    void ratingBulkCommandTest() {
+
+
+        new BookBL().allBooks().take(10).flatMap(book ->
+                        new FetchRatingCollapser(book).toObservable())
+                .toBlocking().subscribe(Log::log);
 
     }
 }

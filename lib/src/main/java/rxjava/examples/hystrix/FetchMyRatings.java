@@ -8,6 +8,7 @@ import rxjava.examples.model.Book;
 import rxjava.examples.model.Rating;
 
 import java.util.Collection;
+import java.util.List;
 
 public class FetchMyRatings extends HystrixObservableCommand<Rating> {
     private final Collection<Book> books;
@@ -17,6 +18,10 @@ public class FetchMyRatings extends HystrixObservableCommand<Rating> {
         super(HystrixCommandGroupKey.Factory.asKey("Books"));
         this.books = books;
         this.ratingBL = ratingBL;
+    }
+
+    public FetchMyRatings(List<Book> booksBatch) {
+        this(booksBatch, new RatingBL());
     }
 
 
