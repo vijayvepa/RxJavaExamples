@@ -1,5 +1,9 @@
 package rxjava.examples;
 
+import com.netflix.hystrix.HystrixCommandKey;
+import com.netflix.hystrix.HystrixEventType;
+import com.netflix.hystrix.metric.HystrixCommandCompletion;
+import com.netflix.hystrix.metric.HystrixCommandCompletionStream;
 import org.junit.jupiter.api.Test;
 import rx.Observable;
 import rxjava.examples.hystrix.BlockingCommand;
@@ -101,6 +105,19 @@ public class HystrixTests {
         new BookBL().allBooks().take(10).flatMap(book ->
                         new FetchRatingCollapser(book).toObservable())
                 .toBlocking().subscribe(Log::log);
+
+    }
+
+    @Test
+    void ratingStats() {
+
+        Observable<HystrixCommandCompletion> stats =
+                HystrixCommandCompletionStream.getInstance(HystrixCommandKey.Factory.asKey("FetchRating")).observe();
+
+        stats.filter(e -> e.getEventCounts().getCount(HystrixEventType.FAILURE) > 0)
+                .window(1, TimeUnit.SECONDS)
+                .flatMap(Observable::count)
+                .subscribe(x -> Log.log("INFO: " + x + " failures/s"));
 
     }
 }
