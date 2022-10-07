@@ -1,0 +1,7 @@
+apply plugin: 'java'
+
+dependencies {
+    // https://mvnrepository.com/artifact/io.dropwizard.metrics/metrics-core
+    implementation 'io.dropwizard.metrics:metrics-core:4.2.12'
+
+}

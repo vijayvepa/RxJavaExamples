@@ -13,3 +13,5 @@ include 'activemq'
 include 'twitter4jexample'
 include 'springexample'
 include 'spock'
+
+include 'metrics'
