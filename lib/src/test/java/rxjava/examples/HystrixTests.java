@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import rx.Observable;
 import rxjava.examples.hystrix.BlockingCommand;
 import rxjava.examples.hystrix.CitiesCommand;
+import rxjava.examples.logic.BookBL;
+import rxjava.examples.logic.RatingBL;
 import rxjava.examples.retrofit.Cities;
 import rxjava.examples.retrofit.MeetupApi;
 
@@ -72,5 +74,11 @@ public class HystrixTests {
                         .onErrorResumeNext(ex -> Observable.empty()))
                 .toBlocking().subscribe(Log::log);
 
+    }
+
+    @Test
+    void ratingTest() {
+        RatingBL ratingBL = new RatingBL();
+        new BookBL().allBooks().take(5).flatMap(ratingBL::fetchRating).toBlocking().subscribe(Log::log);
     }
 }

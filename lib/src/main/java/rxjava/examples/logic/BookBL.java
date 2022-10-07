@@ -7,6 +7,7 @@ import rxjava.examples.model.Person;
 import rxjava.examples.utils.ObservableUtils;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class BookBL {
 
@@ -17,6 +18,10 @@ public class BookBL {
     public BookBL() {
         random = new Random();
         bookLength = 1;
+    }
+
+    public Observable<Book> allBooks() {
+        return Observable.interval(300, TimeUnit.MILLISECONDS).zipWith(Observable.just(new Book()).repeat(), (x, y) -> y);
     }
 
     public Observable<Book> bestBookFor(Person person) {
