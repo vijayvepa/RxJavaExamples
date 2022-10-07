@@ -4,11 +4,14 @@ import org.junit.jupiter.api.Test;
 import rx.Observable;
 import rxjava.examples.hystrix.BlockingCommand;
 import rxjava.examples.hystrix.CitiesCommand;
+import rxjava.examples.hystrix.FetchMyRatings;
 import rxjava.examples.logic.BookBL;
 import rxjava.examples.logic.RatingBL;
+import rxjava.examples.model.Book;
 import rxjava.examples.retrofit.Cities;
 import rxjava.examples.retrofit.MeetupApi;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -80,5 +83,13 @@ public class HystrixTests {
     void ratingTest() {
         RatingBL ratingBL = new RatingBL();
         new BookBL().allBooks().take(5).flatMap(ratingBL::fetchRating).toBlocking().subscribe(Log::log);
+    }
+
+    @Test
+    void ratingBulkTest() {
+        RatingBL ratingBL = new RatingBL();
+        final List<Book> single = new BookBL().allBooks().take(5).toList().toBlocking().single();
+        new FetchMyRatings(single, ratingBL).observe().toBlocking().subscribe(Log::log);
+
     }
 }
