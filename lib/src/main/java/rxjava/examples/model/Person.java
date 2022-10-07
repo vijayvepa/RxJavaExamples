@@ -8,4 +8,6 @@ import lombok.experimental.Accessors;
 public class Person {
     boolean hasActivity;
     int id;
+    int age;
+    String firstName;
 }
