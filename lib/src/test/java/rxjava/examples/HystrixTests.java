@@ -1,12 +1,19 @@
 package rxjava.examples;
 
 import org.junit.jupiter.api.Test;
+import rx.Observable;
 import rxjava.examples.hystrix.BlockingCommand;
+import rxjava.examples.hystrix.CitiesCommand;
+import rxjava.examples.retrofit.Cities;
+import rxjava.examples.retrofit.MeetupApi;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 public class HystrixTests {
 
@@ -45,6 +52,25 @@ public class HystrixTests {
                 .timeout(3, TimeUnit.SECONDS)
                 .toBlocking()
                 .subscribe(Log::log);
+
+    }
+
+    @Test
+    void hystrixCircuitTest() {
+        MeetupApi meetupApi = mock(MeetupApi.class);
+
+        given(meetupApi.listCities(anyDouble(), anyDouble())).willReturn(
+                Observable.<Cities>error(new RuntimeException("Broken"))
+                        .doOnSubscribe(() -> Log.log("DEBUG: Invoking"))
+                        .delay(2, TimeUnit.SECONDS)
+        );
+
+        Observable.interval(50, TimeUnit.MILLISECONDS)
+                .doOnNext(x -> Log.log("DEBUG: Requesting"))
+                .flatMap(x -> new CitiesCommand(meetupApi, 52.229841, 21.011736).toObservable()
+                        .doOnError(t -> Log.log("ERROR: " + t))
+                        .onErrorResumeNext(ex -> Observable.empty()))
+                .toBlocking().subscribe(Log::log);
 
     }
 }
